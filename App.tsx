@@ -47,7 +47,7 @@ const SectionHeader = ({ badge, title, subtitle, centered = true }: { badge: str
   </div>
 );
 
-// --- Sub-Components ---
+// --- Home Page Components ---
 
 const Hero = () => (
   <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden pt-20">
@@ -122,7 +122,7 @@ const ServicesPreview = () => (
 );
 
 const Home = () => (
-  <div className="bg-slate-950 overflow-x-hidden">
+  <div className="bg-slate-950 overflow-x-hidden animate-fade-in">
     <Hero />
     <ServicesPreview />
     <section className="py-24 md:py-32 bg-slate-900/20 border-y border-slate-900/50">
@@ -150,11 +150,11 @@ const Home = () => (
 );
 
 const Services = () => (
-  <div className="bg-slate-950">
-    <section className="relative pt-48 pb-24 bg-slate-950 border-b border-slate-900 overflow-hidden">
+  <div className="bg-slate-950 animate-fade-in">
+    <section className="relative pt-48 pb-24 border-b border-slate-900 overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.1),transparent_75%)]"></div>
       <div className="max-w-7xl mx-auto px-6 relative">
-        <SectionHeader badge="Expertise" title="Our Solutions" subtitle="End-to-end digital expertise tailored for modern enterprises." centered={false} />
+        <SectionHeader badge="Services" title="Our Solutions" subtitle="End-to-end digital expertise tailored for modern enterprises." centered={false} />
       </div>
     </section>
     <section className="py-24 px-6 max-w-7xl mx-auto">
@@ -167,7 +167,7 @@ const Services = () => (
           { title: "SEO & Marketing", icon: "fa-magnifying-glass-chart", desc: "Data-driven SEO strategies that dominate rankings and drive high-intent traffic.", features: ["Technical SEO", "Content Strategy", "Performance Audit", "Backlink Strategy"] },
           { title: "AI Solutions", icon: "fa-brain", desc: "Integrating Generative AI and predictive analytics to future-proof your product.", features: ["LLM Integration", "Data Visualization", "ML Workflows", "Custom Chatbots"] }
         ].map((service, i) => (
-          <div key={i} className="group p-10 bg-slate-900/30 border border-slate-800 rounded-[2.5rem] hover:border-blue-500/40 hover:bg-slate-900/50 transition-all duration-500 flex flex-col h-full shadow-lg hover:-translate-y-1">
+          <div key={i} className="group p-10 bg-slate-900/30 border border-slate-800 rounded-[2.5rem] hover:border-blue-500/40 hover:bg-slate-900/50 transition-all duration-500 flex flex-col h-full shadow-lg hover:-translate-y-2">
             <div className="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-10 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 group-hover:scale-110">
               <i className={`fa-solid ${service.icon} text-xl`}></i>
             </div>
@@ -195,8 +195,8 @@ const Services = () => (
 );
 
 const About = () => (
-  <div className="bg-slate-950">
-    <section className="relative pt-48 pb-24 bg-slate-950 border-b border-slate-900 overflow-hidden">
+  <div className="bg-slate-950 animate-fade-in">
+    <section className="relative pt-48 pb-24 border-b border-slate-900 overflow-hidden">
       <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_75%_0%,rgba(99,102,241,0.1),transparent_70%)]"></div>
       <div className="max-w-7xl mx-auto px-6 relative">
         <SectionHeader badge="About Us" title="Architects of Innovation" subtitle="We are a multidisciplinary team dedicated to pushing digital boundaries." centered={false} />
@@ -268,7 +268,7 @@ const Contact = () => {
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({
           ...formData,
-          _subject: `Gen7ven Contact: ${formData.fullName}`,
+          _subject: `Gen7ven New Lead: ${formData.fullName}`,
           _template: "table"
         })
       });
@@ -284,7 +284,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="bg-slate-950">
+    <div className="bg-slate-950 animate-fade-in">
       <section className="relative pt-48 pb-20 overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.1),transparent_75%)]"></div>
         <div className="max-w-7xl mx-auto px-6 relative text-left">
@@ -324,10 +324,10 @@ const Contact = () => {
                 </div>
                 <h2 className="text-3xl md:text-5xl font-black text-white mb-6">Proposal Received!</h2>
                 <p className="text-slate-400 mb-12 text-lg md:text-xl font-light">Thank you. Check your email shortly for our initial project assessment.</p>
-                <button onClick={() => setStatus('IDLE')} className="px-12 py-5 bg-blue-600 text-white font-black rounded-full hover:bg-blue-700 transition-all">Return to Form</button>
+                <button onClick={() => setStatus('IDLE')} className="px-12 py-5 bg-blue-600 text-white font-black rounded-full hover:bg-blue-700 transition-all shadow-xl active:scale-95">Return to Form</button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="bg-slate-900/40 border border-slate-800/80 p-8 md:p-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl backdrop-blur-md animate-fade-up">
+              <form onSubmit={handleSubmit} className="bg-slate-900/40 border border-slate-800/80 p-8 md:p-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl backdrop-blur-md">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
                   <div className="mb-8">
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1 text-left">Full Name</label>
@@ -348,7 +348,7 @@ const Contact = () => {
                   {errors.message && <p className="mt-3 text-[10px] text-red-400 font-bold px-1 flex items-center animate-fade-in"><i className="fa-solid fa-circle-exclamation mr-2"></i>{errors.message}</p>}
                 </div>
                 <button type="submit" disabled={status === 'SUBMITTING'} className="w-full py-5 md:py-6 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-black rounded-2xl transition-all shadow-2xl shadow-blue-600/30 active:scale-[0.98] flex items-center justify-center gap-4 text-lg md:text-xl group">
-                  {status === 'SUBMITTING' ? "Submitting..." : "Submit Request"}
+                  {status === 'SUBMITTING' ? "Architecting Submission..." : "Submit Proposal"}
                   {status !== 'SUBMITTING' && <i className="fa-solid fa-paper-plane text-sm group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>}
                 </button>
               </form>
@@ -361,12 +361,13 @@ const Contact = () => {
   );
 };
 
-// --- App Entry Point ---
+// --- App Root ---
 
 const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
   useEffect(() => {
+    // Basic detection for static .html file serving on platforms like Vercel
     const handlePopState = () => setCurrentPath(window.location.pathname);
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -374,16 +375,17 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     const p = currentPath.toLowerCase();
-    if (p.includes('services.html')) return <Services />;
-    if (p.includes('about.html')) return <About />;
-    if (p.includes('contact.html')) return <Contact />;
+    // Vercel static routing often retains .html or strips it. We handle both.
+    if (p.includes('services.html') || p.endsWith('/services')) return <Services />;
+    if (p.includes('about.html') || p.endsWith('/about')) return <About />;
+    if (p.includes('contact.html') || p.endsWith('/contact')) return <Contact />;
     return <Home />;
   };
 
   return (
     <div className="relative min-h-screen selection:bg-blue-500/40 text-slate-200 bg-slate-950 flex flex-col">
       <Navbar />
-      <main className="flex-grow animate-fade-in">
+      <main className="flex-grow">
         {renderContent()}
       </main>
       <Footer />
