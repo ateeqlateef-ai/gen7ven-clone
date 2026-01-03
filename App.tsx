@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -198,7 +197,7 @@ const Services = () => (
 const About = () => (
   <div className="bg-slate-950 animate-fade-in">
     <section className="relative pt-48 pb-24 border-b border-slate-900 overflow-hidden">
-      <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_75%_0%,rgba(99,102,241,0.1),transparent_70%)]"></div>
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_75%_0%,rgba(99,102,241,0.1),transparent_70%)]"></div>
       <div className="max-w-7xl mx-auto px-6 relative">
         <SectionHeader badge="About Us" title="Architects of Innovation" subtitle="We are a multidisciplinary team dedicated to pushing digital boundaries." centered={false} />
       </div>
@@ -237,7 +236,13 @@ const About = () => (
 );
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ fullName: '', email: '', service: '', industry: '', message: '' });
+  const [formData, setFormData] = useState({ 
+    fullName: '', 
+    email: '', 
+    service: '', 
+    industry: '', 
+    message: '' 
+  });
   const [errors, setErrors] = useState<any>({});
   const [status, setStatus] = useState<'IDLE' | 'SUBMITTING' | 'SUCCESS' | 'ERROR'>('IDLE');
 
@@ -250,10 +255,10 @@ const Contact = () => {
     if (!formData.email.trim()) {
       newErrors.email = "Email Address is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email format is invalid";
+      newErrors.email = "Please enter a valid email address";
     }
-    if (!formData.service) newErrors.service = "Please select a service";
-    if (!formData.industry) newErrors.industry = "Please select an industry";
+    if (!formData.service || formData.service === "Select Service") newErrors.service = "Please select a service";
+    if (!formData.industry || formData.industry === "Select Industry") newErrors.industry = "Please select an industry";
     if (!formData.message.trim()) newErrors.message = "Message cannot be empty";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -263,23 +268,33 @@ const Contact = () => {
     e.preventDefault();
     if (!validate()) return;
     setStatus('SUBMITTING');
+    
     try {
+      // Using FormSubmit AJAX endpoint
       const response = await fetch("https://formsubmit.co/ajax/mason.liam1122@gmail.com", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        headers: { 
+          "Content-Type": "application/json", 
+          "Accept": "application/json" 
+        },
         body: JSON.stringify({
           ...formData,
-          _subject: `Gen7ven New Lead: ${formData.fullName}`,
-          _template: "table"
+          _subject: `Gen7ven Digital Lead: ${formData.fullName}`,
+          _template: "table",
+          _captcha: "false" // Disable captcha for AJAX requests if possible
         })
       });
-      if (response.ok) {
+      
+      const result = await response.json();
+      
+      if (response.ok && result.success === "true") {
         setStatus('SUCCESS');
         setFormData({ fullName: '', email: '', service: '', industry: '', message: '' });
       } else {
         setStatus('ERROR');
       }
     } catch (err) {
+      console.error("Submission error:", err);
       setStatus('ERROR');
     }
   };
@@ -292,11 +307,13 @@ const Contact = () => {
           <SectionHeader badge="Contact" title="Start a Conversation" subtitle="Ready to build something extraordinary? Our team is standing by." centered={false} />
         </div>
       </section>
+      
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20">
           <div className="lg:col-span-4 space-y-12 order-2 lg:order-1">
             <div className="space-y-10">
               <h3 className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em] mb-10 text-left">Direct Connect</h3>
+              
               <div className="flex gap-8 group">
                 <div className="w-14 h-14 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-center text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-lg shrink-0">
                   <i className="fa-solid fa-envelope"></i>
@@ -306,6 +323,7 @@ const Contact = () => {
                   <p className="text-slate-400 font-medium text-sm text-left">hello@gen7ven.agency</p>
                 </div>
               </div>
+              
               <div className="flex gap-8 group">
                 <div className="w-14 h-14 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-center text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-lg shrink-0">
                   <i className="fa-solid fa-location-dot"></i>
@@ -317,6 +335,7 @@ const Contact = () => {
               </div>
             </div>
           </div>
+          
           <div className="lg:col-span-8 order-1 lg:order-2">
             {status === 'SUCCESS' ? (
               <div className="bg-slate-900/40 border border-slate-800 p-12 md:p-20 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl text-center animate-scale-up">
@@ -325,38 +344,107 @@ const Contact = () => {
                 </div>
                 <h2 className="text-3xl md:text-5xl font-black text-white mb-6">Proposal Received!</h2>
                 <p className="text-slate-400 mb-12 text-lg md:text-xl font-light">Thank you. Check your email shortly for our initial project assessment.</p>
-                <button onClick={() => setStatus('IDLE')} className="px-12 py-5 bg-blue-600 text-white font-black rounded-full hover:bg-blue-700 transition-all shadow-xl active:scale-95">Return to Form</button>
+                <button 
+                  onClick={() => setStatus('IDLE')} 
+                  className="px-12 py-5 bg-blue-600 text-white font-black rounded-full hover:bg-blue-700 transition-all shadow-xl active:scale-95"
+                >
+                  Return to Form
+                </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="bg-slate-900/40 border border-slate-800/80 p-8 md:p-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl backdrop-blur-md">
+              <form onSubmit={handleSubmit} className="bg-slate-900/40 border border-slate-800/80 p-8 md:p-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl backdrop-blur-md relative overflow-hidden">
+                {status === 'ERROR' && (
+                  <div className="mb-8 p-6 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-4 text-red-400 animate-fade-in">
+                    <i className="fa-solid fa-circle-xmark text-xl"></i>
+                    <div>
+                      <p className="font-bold">Submission failed</p>
+                      <p className="text-xs opacity-80">There was a problem sending your message. Please try again or contact us directly.</p>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
                   <div className="mb-8">
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1 text-left">Full Name</label>
-                    <input type="text" placeholder="e.g. Alexander Pierce" className={`w-full bg-slate-950/80 border ${errors.fullName ? 'border-red-500/50' : 'border-slate-800'} rounded-2xl px-6 py-4 md:py-5 text-slate-200 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-700 font-medium`} value={formData.fullName} onChange={(e) => setFormData({...formData, fullName: e.target.value})} />
+                    <input 
+                      type="text" 
+                      name="name"
+                      placeholder="e.g. Alexander Pierce" 
+                      className={`w-full bg-slate-950/80 border ${errors.fullName ? 'border-red-500/50' : 'border-slate-800'} rounded-2xl px-6 py-4 md:py-5 text-slate-200 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-700 font-medium`} 
+                      value={formData.fullName} 
+                      onChange={(e) => setFormData({...formData, fullName: e.target.value})} 
+                    />
                     {errors.fullName && <p className="mt-3 text-[10px] text-red-400 font-bold px-1 flex items-center animate-fade-in"><i className="fa-solid fa-circle-exclamation mr-2"></i>{errors.fullName}</p>}
                   </div>
+                  
                   <div className="mb-8">
                     <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1 text-left">Email Address</label>
-                    <input type="email" placeholder="alex@enterprise.com" className={`w-full bg-slate-950/80 border ${errors.email ? 'border-red-500/50' : 'border-slate-800'} rounded-2xl px-6 py-4 md:py-5 text-slate-200 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-700 font-medium`} value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+                    <input 
+                      type="email" 
+                      name="email"
+                      placeholder="alex@enterprise.com" 
+                      className={`w-full bg-slate-950/80 border ${errors.email ? 'border-red-500/50' : 'border-slate-800'} rounded-2xl px-6 py-4 md:py-5 text-slate-200 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-700 font-medium`} 
+                      value={formData.email} 
+                      onChange={(e) => setFormData({...formData, email: e.target.value})} 
+                    />
                     {errors.email && <p className="mt-3 text-[10px] text-red-400 font-bold px-1 flex items-center animate-fade-in"><i className="fa-solid fa-circle-exclamation mr-2"></i>{errors.email}</p>}
                   </div>
-                  <CustomDropdown label="Which Service you want ?" options={services} value={formData.service} onChange={(val) => setFormData({...formData, service: val})} error={errors.service} placeholder="Select Service" />
-                  <CustomDropdown label="What industry are you in?" options={industries} value={formData.industry} onChange={(val) => setFormData({...formData, industry: val})} error={errors.industry} placeholder="Select Industry" />
+                  
+                  <CustomDropdown 
+                    label="Which Service you want ?" 
+                    options={services} 
+                    value={formData.service} 
+                    onChange={(val) => setFormData({...formData, service: val})} 
+                    error={errors.service} 
+                    placeholder="Select Service" 
+                  />
+                  
+                  <CustomDropdown 
+                    label="What industry are you in?" 
+                    options={industries} 
+                    value={formData.industry} 
+                    onChange={(val) => setFormData({...formData, industry: val})} 
+                    error={errors.industry} 
+                    placeholder="Select Industry" 
+                  />
                 </div>
+                
                 <div className="mb-12">
                   <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1 text-left">Message</label>
-                  <textarea rows={6} placeholder="Describe your vision, goals, and timeline..." className={`w-full bg-slate-950/80 border ${errors.message ? 'border-red-500/50' : 'border-slate-800'} rounded-2xl px-6 py-4 md:py-5 text-slate-200 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-700 resize-none font-medium leading-relaxed`} value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} />
+                  <textarea 
+                    rows={6} 
+                    name="message"
+                    placeholder="Describe your vision, goals, and timeline..." 
+                    className={`w-full bg-slate-950/80 border ${errors.message ? 'border-red-500/50' : 'border-slate-800'} rounded-2xl px-6 py-4 md:py-5 text-slate-200 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-700 resize-none font-medium leading-relaxed`} 
+                    value={formData.message} 
+                    onChange={(e) => setFormData({...formData, message: e.target.value})} 
+                  />
                   {errors.message && <p className="mt-3 text-[10px] text-red-400 font-bold px-1 flex items-center animate-fade-in"><i className="fa-solid fa-circle-exclamation mr-2"></i>{errors.message}</p>}
                 </div>
-                <button type="submit" disabled={status === 'SUBMITTING'} className="w-full py-5 md:py-6 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-black rounded-2xl transition-all shadow-2xl shadow-blue-600/30 active:scale-[0.98] flex items-center justify-center gap-4 text-lg md:text-xl group">
-                  {status === 'SUBMITTING' ? "Architecting Submission..." : "Submit Proposal"}
-                  {status !== 'SUBMITTING' && <i className="fa-solid fa-paper-plane text-sm group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>}
+                
+                <button 
+                  type="submit" 
+                  disabled={status === 'SUBMITTING'} 
+                  className="w-full py-5 md:py-6 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-black rounded-2xl transition-all shadow-2xl shadow-blue-600/30 active:scale-[0.98] flex items-center justify-center gap-4 text-lg md:text-xl group"
+                >
+                  {status === 'SUBMITTING' ? (
+                    <>
+                      <i className="fa-solid fa-circle-notch animate-spin"></i>
+                      Architecting Submission...
+                    </>
+                  ) : (
+                    <>
+                      Submit Proposal
+                      <i className="fa-solid fa-paper-plane text-sm group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                    </>
+                  )}
                 </button>
               </form>
             )}
           </div>
         </div>
       </section>
+      
       <CTASection />
     </div>
   );
