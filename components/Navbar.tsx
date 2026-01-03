@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
 
   const isActive = (path: string) => {
     const cp = currentPath.toLowerCase();
-    // Match root, index, or empty string to index.html
+    // Default to index.html for root paths
     if (path === 'index.html' && (cp === '/' || cp === '/index.html' || cp === '')) return true;
     return cp.includes(path.toLowerCase());
   };

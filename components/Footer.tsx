@@ -26,8 +26,8 @@ const Footer: React.FC = () => {
           </div>
           
           <div>
-            <h4 className="text-white font-black mb-8 uppercase text-[10px] tracking-[0.25em]">Services</h4>
-            <ul className="space-y-4 text-slate-400 text-sm font-bold tracking-tight">
+            <h4 className="text-white font-black mb-8 uppercase text-[10px] tracking-[0.25em] text-left">Services</h4>
+            <ul className="space-y-4 text-slate-400 text-sm font-bold tracking-tight text-left">
               <li><a href="services.html" className="hover:text-blue-500 transition-colors">Web Engineering</a></li>
               <li><a href="services.html" className="hover:text-blue-500 transition-colors">Experience Design</a></li>
               <li><a href="services.html" className="hover:text-blue-500 transition-colors">Brand Identity</a></li>
@@ -36,8 +36,8 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="text-white font-black mb-8 uppercase text-[10px] tracking-[0.25em]">Company</h4>
-            <ul className="space-y-4 text-slate-400 text-sm font-bold tracking-tight">
+            <h4 className="text-white font-black mb-8 uppercase text-[10px] tracking-[0.25em] text-left">Company</h4>
+            <ul className="space-y-4 text-slate-400 text-sm font-bold tracking-tight text-left">
               <li><a href="about.html" className="hover:text-blue-500 transition-colors">Our Ethos</a></li>
               <li><a href="services.html" className="hover:text-blue-500 transition-colors">Process</a></li>
               <li><a href="contact.html" className="hover:text-blue-500 transition-colors">Join Team</a></li>
@@ -47,8 +47,8 @@ const Footer: React.FC = () => {
 
           <div className="p-8 bg-slate-900/50 border border-slate-800 rounded-3xl relative overflow-hidden">
              <div className="absolute top-0 right-0 w-24 h-24 bg-blue-600/5 blur-2xl rounded-full"></div>
-             <h4 className="text-white font-black mb-4 text-xs tracking-widest uppercase">Office</h4>
-             <p className="text-slate-400 text-sm leading-relaxed font-medium">
+             <h4 className="text-white font-black mb-4 text-xs tracking-widest uppercase text-left">Office</h4>
+             <p className="text-slate-400 text-sm leading-relaxed font-medium text-left">
                24th Floor, Tech Hub<br/>Silicon Row, London<br/>EC1A 2BN
              </p>
           </div>
