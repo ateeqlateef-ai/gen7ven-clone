@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 const Footer: React.FC = () => {
@@ -6,7 +7,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
           <div className="space-y-6">
-            <a href="index.html" className="text-3xl font-black tracking-tighter text-white block">
+            <a href="#/" className="text-3xl font-black tracking-tighter text-white block">
               GEN<span className="text-blue-500">7</span>VEN
             </a>
             <p className="text-slate-400 text-sm leading-relaxed max-w-xs font-medium">
@@ -28,20 +29,20 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-black mb-8 uppercase text-[10px] tracking-[0.25em] text-left">Services</h4>
             <ul className="space-y-4 text-slate-400 text-sm font-bold tracking-tight text-left">
-              <li><a href="services.html" className="hover:text-blue-500 transition-colors">Web Engineering</a></li>
-              <li><a href="services.html" className="hover:text-blue-500 transition-colors">Experience Design</a></li>
-              <li><a href="services.html" className="hover:text-blue-500 transition-colors">Brand Identity</a></li>
-              <li><a href="services.html" className="hover:text-blue-500 transition-colors">AI & Data Strategy</a></li>
+              <li><a href="#/services" className="hover:text-blue-500 transition-colors">Web Engineering</a></li>
+              <li><a href="#/services" className="hover:text-blue-500 transition-colors">Experience Design</a></li>
+              <li><a href="#/services" className="hover:text-blue-500 transition-colors">Brand Identity</a></li>
+              <li><a href="#/services" className="hover:text-blue-500 transition-colors">AI & Data Strategy</a></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-black mb-8 uppercase text-[10px] tracking-[0.25em] text-left">Company</h4>
             <ul className="space-y-4 text-slate-400 text-sm font-bold tracking-tight text-left">
-              <li><a href="about.html" className="hover:text-blue-500 transition-colors">About Us</a></li>
-              <li><a href="services.html" className="hover:text-blue-500 transition-colors">Our Process</a></li>
-              <li><a href="contact.html" className="hover:text-blue-500 transition-colors">Join Team</a></li>
-              <li><a href="contact.html" className="hover:text-blue-500 transition-colors">Contact Us</a></li>
+              <li><a href="#/about" className="hover:text-blue-500 transition-colors">About Us</a></li>
+              <li><a href="#/services" className="hover:text-blue-500 transition-colors">Our Process</a></li>
+              <li><a href="#/contact" className="hover:text-blue-500 transition-colors">Join Team</a></li>
+              <li><a href="#/contact" className="hover:text-blue-500 transition-colors">Contact Us</a></li>
             </ul>
           </div>
 

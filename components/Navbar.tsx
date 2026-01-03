@@ -1,28 +1,35 @@
+
 import React, { useState, useEffect } from 'react';
 
 const Navbar: React.FC = () => {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [currentHash, setCurrentHash] = useState(window.location.hash || '#/');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleHash = () => setCurrentHash(window.location.hash || '#/');
+    
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('hashchange', handleHash);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('hashchange', handleHash);
+    };
   }, []);
 
   const isActive = (path: string) => {
-    const cp = currentPath.toLowerCase();
-    // Normalize root paths to index.html for active state detection
-    if (path === 'index.html' && (cp === '/' || cp === '/index.html' || cp === '')) return true;
-    return cp.endsWith(path.toLowerCase());
+    const h = currentHash.toLowerCase();
+    if (path === '#/' && (h === '' || h === '#/')) return true;
+    return h.startsWith(path.toLowerCase());
   };
 
   const links = [
-    { name: 'Home', href: 'index.html' },
-    { name: 'Services', href: 'services.html' },
-    { name: 'About Us', href: 'about.html' },
-    { name: 'Contact Us', href: 'contact.html' },
+    { name: 'Home', href: '#/' },
+    { name: 'Services', href: '#/services' },
+    { name: 'About Us', href: '#/about' },
+    { name: 'Contact Us', href: '#/contact' },
   ];
 
   return (
@@ -31,7 +38,7 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex-shrink-0 relative z-[101]">
-            <a href="index.html" className="text-2xl md:text-3xl font-black tracking-tighter text-white group flex items-center">
+            <a href="#/" className="text-2xl md:text-3xl font-black tracking-tighter text-white group flex items-center">
               GEN<span className="text-blue-500 group-hover:rotate-12 transition-transform duration-300">7</span>VEN
             </a>
           </div>
@@ -53,7 +60,7 @@ const Navbar: React.FC = () => {
               </a>
             ))}
             <a 
-              href="contact.html" 
+              href="#/contact" 
               className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-black rounded-full transition-all shadow-xl shadow-blue-600/20 active:scale-95 hover:scale-105 uppercase tracking-widest"
             >
               Start Project
@@ -88,18 +95,12 @@ const Navbar: React.FC = () => {
             </a>
           ))}
           <a 
-            href="contact.html" 
+            href="#/contact" 
             className="w-full max-w-xs py-5 bg-blue-600 text-white font-black rounded-2xl text-center text-xl shadow-2xl shadow-blue-600/30 active:scale-95 mt-8"
             onClick={() => setIsMenuOpen(false)}
           >
             Start Project
           </a>
-        </div>
-        
-        <div className="absolute bottom-12 flex space-x-10">
-            <a href="#" className="text-slate-600 text-2xl hover:text-white transition-colors"><i className="fa-brands fa-x-twitter"></i></a>
-            <a href="#" className="text-slate-600 text-2xl hover:text-white transition-colors"><i className="fa-brands fa-linkedin"></i></a>
-            <a href="#" className="text-slate-600 text-2xl hover:text-white transition-colors"><i className="fa-brands fa-instagram"></i></a>
         </div>
       </div>
     </nav>

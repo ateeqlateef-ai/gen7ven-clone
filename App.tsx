@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -19,7 +20,7 @@ const CTASection = () => (
         </p>
         <div className="pt-4">
           <a 
-            href="contact.html" 
+            href="#/contact" 
             className="inline-flex items-center px-10 py-5 bg-white text-blue-700 font-extrabold text-lg rounded-full hover:bg-slate-100 hover:scale-105 transition-all shadow-xl active:scale-95 group/btn"
           >
             Get Your Free Consultation
@@ -71,14 +72,14 @@ const Hero = () => (
       
       <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6 animate-fade-up stagger-3">
         <a 
-          href="contact.html" 
+          href="#/contact" 
           className="w-full sm:w-auto px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-black text-lg rounded-full transition-all flex items-center justify-center shadow-2xl shadow-blue-600/25 hover:scale-105 active:scale-95 group"
         >
           Start a Project
           <i className="fa-solid fa-arrow-right ml-3 group-hover:translate-x-1.5 transition-transform"></i>
         </a>
         <a 
-          href="services.html" 
+          href="#/services" 
           className="w-full sm:w-auto px-10 py-5 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-lg rounded-full transition-all hover:border-white/20 active:scale-95"
         >
           Explore Services
@@ -95,17 +96,17 @@ const ServicesPreview = () => (
   <section className="py-24 md:py-32 px-6 max-w-7xl mx-auto">
     <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-20 gap-10">
       <SectionHeader badge="Expertise" title="World-class services for ambitious brands." centered={false} />
-      <a href="services.html" className="text-blue-500 hover:text-blue-400 font-extrabold flex items-center group text-lg pb-4 transition-colors">
+      <a href="#/services" className="text-blue-500 hover:text-blue-400 font-extrabold flex items-center group text-lg pb-4 transition-colors">
         View All Services <i className="fa-solid fa-arrow-right-long ml-3 group-hover:translate-x-2 transition-transform"></i>
       </a>
     </div>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
       {[
-        { title: "UI/UX Design", desc: "User-centric designs that focus on flow, aesthetics, and high conversion psychology.", icon: "fa-bezier-curve", color: "from-purple-500/20 to-indigo-500/20" },
-        { title: "Full-Stack Dev", desc: "Industrial-grade architectures optimized for extreme speed and global scalability.", icon: "fa-code", color: "from-blue-500/20 to-cyan-500/20" },
-        { title: "AI Integration", desc: "Powering your applications with the latest LLM capabilities and machine learning.", icon: "fa-brain", color: "from-emerald-500/20 to-teal-500/20" }
+        { title: "UI/UX Design", desc: "User-centric designs that focus on flow, aesthetics, and high conversion psychology.", icon: "fa-bezier-curve", color: "from-purple-500/20 to-indigo-500/20", path: "#/services" },
+        { title: "Full-Stack Dev", desc: "Industrial-grade architectures optimized for extreme speed and global scalability.", icon: "fa-code", color: "from-blue-500/20 to-cyan-500/20", path: "#/services" },
+        { title: "AI Integration", desc: "Powering your applications with the latest LLM capabilities and machine learning.", icon: "fa-brain", color: "from-emerald-500/20 to-teal-500/20", path: "#/services" }
       ].map((s, i) => (
-        <div key={i} className="group relative p-10 md:p-12 bg-slate-900/40 border border-slate-800 rounded-[2.5rem] hover:border-blue-500/50 transition-all duration-500 overflow-hidden shadow-xl hover:-translate-y-2">
+        <a href={s.path} key={i} className="group relative p-10 md:p-12 bg-slate-900/40 border border-slate-800 rounded-[2.5rem] hover:border-blue-500/50 transition-all duration-500 overflow-hidden shadow-xl hover:-translate-y-2">
           <div className={`absolute inset-0 bg-gradient-to-br ${s.color} opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10`}></div>
           <div className="w-16 md:w-20 h-16 md:h-20 bg-slate-800/50 text-blue-500 rounded-[1.5rem] flex items-center justify-center mb-10 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 group-hover:scale-110 shadow-lg">
             <i className={`fa-solid ${s.icon} text-2xl md:text-3xl`}></i>
@@ -115,7 +116,7 @@ const ServicesPreview = () => (
           <div className="pt-8 border-t border-slate-800/50 flex items-center text-[10px] font-black text-slate-500 group-hover:text-white tracking-[0.2em] transition-colors uppercase">
             Learn More <i className="fa-solid fa-plus ml-auto"></i>
           </div>
-        </div>
+        </a>
       ))}
     </div>
   </section>
@@ -182,7 +183,7 @@ const Services = () => (
               ))}
             </ul>
             <div className="pt-8 border-t border-slate-800/50">
-              <a href="contact.html" className="inline-flex items-center text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-white transition-colors">
+              <a href="#/contact" className="inline-flex items-center text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-white transition-colors">
                 Enquire Now <i className="fa-solid fa-arrow-right-long ml-3 group-hover:translate-x-2 transition-transform"></i>
               </a>
             </div>
@@ -364,21 +365,23 @@ const Contact = () => {
 // --- App Root ---
 
 const App: React.FC = () => {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [currentHash, setCurrentHash] = useState(window.location.hash || '#/');
 
   useEffect(() => {
-    // Basic detection for static .html file serving on platforms like Vercel
-    const handlePopState = () => setCurrentPath(window.location.pathname);
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    const handleHashChange = () => {
+      setCurrentHash(window.location.hash || '#/');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   const renderContent = () => {
-    const p = currentPath.toLowerCase();
-    // Vercel static routing often retains .html or strips it. We handle both.
-    if (p.includes('services.html') || p.endsWith('/services')) return <Services />;
-    if (p.includes('about.html') || p.endsWith('/about')) return <About />;
-    if (p.includes('contact.html') || p.endsWith('/contact')) return <Contact />;
+    const h = currentHash.toLowerCase();
+    if (h.includes('/services')) return <Services />;
+    if (h.includes('/about')) return <About />;
+    if (h.includes('/contact')) return <Contact />;
     return <Home />;
   };
 
