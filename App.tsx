@@ -1,484 +1,163 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import CustomDropdown from './components/CustomDropdown';
-
-// --- Shared Components ---
-
-const CTASection = () => (
-  <section className="py-24 md:py-32 px-4 relative overflow-hidden">
-    <div className="max-w-6xl mx-auto p-10 md:p-24 bg-gradient-to-br from-blue-700 via-indigo-700 to-blue-800 rounded-[2.5rem] md:rounded-[4rem] text-center relative shadow-2xl shadow-blue-900/30 overflow-hidden group">
-      <div className="absolute top-0 right-0 p-10 opacity-10 scale-150 rotate-12 select-none pointer-events-none transition-transform duration-1000 group-hover:rotate-45 group-hover:scale-[2]">
-        <i className="fa-solid fa-rocket text-[250px] text-white"></i>
-      </div>
-      
-      <div className="relative z-10 space-y-8 animate-fade-up">
-        <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight">Ready to scale your business?</h2>
-        <p className="text-blue-100 text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">
-          Join the 150+ global brands that have accelerated their digital growth with Gen7ven's high-performance engineering.
-        </p>
-        <div className="pt-4">
-          <a 
-            href="#/contact" 
-            className="inline-flex items-center px-10 py-5 bg-white text-blue-700 font-extrabold text-lg rounded-full hover:bg-slate-100 hover:scale-105 transition-all shadow-xl active:scale-95 group/btn"
-          >
-            Get Your Free Consultation
-            <i className="fa-solid fa-calendar-check ml-3 group-hover/btn:rotate-12 transition-transform"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-const SectionHeader = ({ badge, title, subtitle, centered = true }: { badge: string, title: string, subtitle?: string, centered?: boolean }) => (
-  <div className={`mb-16 ${centered ? 'text-center max-w-3xl mx-auto' : 'max-w-2xl text-left'}`}>
-    <span className="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-black uppercase tracking-[0.2em] mb-6 animate-fade-in">
-      {badge}
-    </span>
-    <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight leading-[1.1] animate-fade-up">
-      {title}
-    </h2>
-    {subtitle && (
-      <p className="text-slate-400 text-base md:text-xl leading-relaxed font-light animate-fade-up stagger-1">
-        {subtitle}
-      </p>
-    )}
-  </div>
-);
-
-// --- Home Page Components ---
-
-const Hero = () => (
-  <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden pt-20">
-    <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-600/10 blur-[150px] rounded-full -z-10 animate-pulse"></div>
-    <div className="max-w-6xl mx-auto space-y-10 relative z-10">
-      <div className="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-blue-400 text-[10px] md:text-xs font-bold uppercase tracking-widest animate-fade-in shadow-xl">
-        <span className="relative flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
-        </span>
-        <span>Premium Digital Engineering</span>
-      </div>
-      
-      <h1 className="hero-title font-black text-white tracking-tighter animate-fade-up stagger-1">
-        Building the <span className="text-gradient">Next Gen</span> of Digital Products
-      </h1>
-      
-      <p className="text-slate-400 text-base md:text-2xl max-w-3xl mx-auto leading-relaxed font-light animate-fade-up stagger-2 px-4">
-        We architect high-performance digital experiences that merge cutting-edge technology with world-class design standards.
-      </p>
-      
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6 animate-fade-up stagger-3">
-        <a 
-          href="#/contact" 
-          className="w-full sm:w-auto px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white font-black text-lg rounded-full transition-all flex items-center justify-center shadow-2xl shadow-blue-600/25 hover:scale-105 active:scale-95 group"
-        >
-          Start a Project
-          <i className="fa-solid fa-arrow-right ml-3 group-hover:translate-x-1.5 transition-transform"></i>
-        </a>
-        <a 
-          href="#/services" 
-          className="w-full sm:w-auto px-10 py-5 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-lg rounded-full transition-all hover:border-white/20 active:scale-95"
-        >
-          Explore Services
-        </a>
-      </div>
-    </div>
-    <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-30 select-none">
-      <i className="fa-solid fa-chevron-down text-white text-2xl"></i>
-    </div>
-  </section>
-);
-
-const ServicesPreview = () => (
-  <section className="py-24 md:py-32 px-6 max-w-7xl mx-auto">
-    <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-20 gap-10">
-      <SectionHeader badge="Expertise" title="World-class services for ambitious brands." centered={false} />
-      <a href="#/services" className="text-blue-500 hover:text-blue-400 font-extrabold flex items-center group text-lg pb-4 transition-colors">
-        View All Services <i className="fa-solid fa-arrow-right-long ml-3 group-hover:translate-x-2 transition-transform"></i>
-      </a>
-    </div>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {[
-        { title: "UI/UX Design", desc: "User-centric designs that focus on flow, aesthetics, and high conversion psychology.", icon: "fa-bezier-curve", color: "from-purple-500/20 to-indigo-500/20", path: "#/services" },
-        { title: "Full-Stack Dev", desc: "Industrial-grade architectures optimized for extreme speed and global scalability.", icon: "fa-code", color: "from-blue-500/20 to-cyan-500/20", path: "#/services" },
-        { title: "AI Integration", desc: "Powering your applications with the latest LLM capabilities and machine learning.", icon: "fa-brain", color: "from-emerald-500/20 to-teal-500/20", path: "#/services" }
-      ].map((s, i) => (
-        <a href={s.path} key={i} className="group relative p-10 md:p-12 bg-slate-900/40 border border-slate-800 rounded-[2.5rem] hover:border-blue-500/50 transition-all duration-500 overflow-hidden shadow-xl hover:-translate-y-2">
-          <div className={`absolute inset-0 bg-gradient-to-br ${s.color} opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10`}></div>
-          <div className="w-16 md:w-20 h-16 md:h-20 bg-slate-800/50 text-blue-500 rounded-[1.5rem] flex items-center justify-center mb-10 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 group-hover:scale-110 shadow-lg">
-            <i className={`fa-solid ${s.icon} text-2xl md:text-3xl`}></i>
-          </div>
-          <h4 className="text-2xl md:text-3xl font-bold text-white mb-6 tracking-tight">{s.title}</h4>
-          <p className="text-slate-400 leading-relaxed mb-10 font-medium text-sm md:text-base">{s.desc}</p>
-          <div className="pt-8 border-t border-slate-800/50 flex items-center text-[10px] font-black text-slate-500 group-hover:text-white tracking-[0.2em] transition-colors uppercase">
-            Learn More <i className="fa-solid fa-plus ml-auto"></i>
-          </div>
-        </a>
-      ))}
-    </div>
-  </section>
-);
-
-const Home = () => (
-  <div className="bg-slate-950 overflow-x-hidden animate-fade-in">
-    <Hero />
-    <ServicesPreview />
-    <section className="py-24 md:py-32 bg-slate-900/20 border-y border-slate-900/50">
-      <div className="max-w-7xl mx-auto px-6">
-        <SectionHeader badge="Values" title="Engineering excellence with a creative soul." />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {[
-            { title: "Performance First", icon: "fa-bolt", desc: "Every microsecond counts. We optimize for high-speed delivery and global reach." },
-            { title: "Future Scalability", icon: "fa-layer-group", desc: "Built with a modular foundation that grows effortlessly with your enterprise demands." },
-            { title: "Modern Architecture", icon: "fa-microchip", desc: "Leveraging React, Node.js, and Cloud Native stacks for resilient digital assets." }
-          ].map((f, i) => (
-            <div key={i} className="text-center p-10 bg-slate-900/30 border border-slate-800 rounded-[2rem] hover:-translate-y-2 transition-all group shadow-xl">
-              <div className="w-16 h-16 bg-blue-600/10 text-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-inner group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
-                <i className={`fa-solid ${f.icon} text-2xl`}></i>
-              </div>
-              <h4 className="text-2xl font-bold text-white mb-4 tracking-tight">{f.title}</h4>
-              <p className="text-slate-400 font-medium leading-relaxed text-sm md:text-base">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-    <CTASection />
-  </div>
-);
-
-const Services = () => (
-  <div className="bg-slate-950 animate-fade-in">
-    <section className="relative pt-48 pb-24 border-b border-slate-900 overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.1),transparent_75%)]"></div>
-      <div className="max-w-7xl mx-auto px-6 relative">
-        <SectionHeader badge="Services" title="Our Solutions" subtitle="End-to-end digital expertise tailored for modern enterprises." centered={false} />
-      </div>
-    </section>
-    <section className="py-24 px-6 max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[
-          { title: "UI/UX Design", icon: "fa-pencil-ruler", desc: "User research and interface designs that prioritize engagement and retention.", features: ["User Psychology", "Interactive Prototyping", "Design Systems", "Accessibility"] },
-          { title: "Web Development", icon: "fa-laptop-code", desc: "High-performance React & Node.js applications with pixel-perfect precision.", features: ["Single Page Apps", "API Development", "Real-time Systems", "Performance Tuning"] },
-          { title: "Mobile App Dev", icon: "fa-mobile-screen", desc: "Cross-platform mobile apps that deliver native-level performance and feel.", features: ["iOS & Android", "React Native", "Offline-First", "Push Notifications"] },
-          { title: "Brand Identity", icon: "fa-gem", desc: "Crafting digital-first brands that resonate across every visual touchpoint.", features: ["Visual Strategy", "Logo & Assets", "Typography", "Motion Identity"] },
-          { title: "SEO & Marketing", icon: "fa-magnifying-glass-chart", desc: "Data-driven SEO strategies that dominate rankings and drive high-intent traffic.", features: ["Technical SEO", "Content Strategy", "Performance Audit", "Backlink Strategy"] },
-          { title: "AI Solutions", icon: "fa-brain", desc: "Integrating Generative AI and predictive analytics to future-proof your product.", features: ["LLM Integration", "Data Visualization", "ML Workflows", "Custom Chatbots"] }
-        ].map((service, i) => (
-          <div key={i} className="group p-10 bg-slate-900/30 border border-slate-800 rounded-[2.5rem] hover:border-blue-500/40 hover:bg-slate-900/50 transition-all duration-500 flex flex-col h-full shadow-lg hover:-translate-y-2">
-            <div className="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-10 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 group-hover:scale-110">
-              <i className={`fa-solid ${service.icon} text-xl`}></i>
-            </div>
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-6 tracking-tight group-hover:text-blue-400 transition-colors">{service.title}</h3>
-            <p className="text-slate-400 leading-relaxed mb-10 flex-grow font-medium text-sm md:text-base">{service.desc}</p>
-            <ul className="space-y-4 mb-10">
-              {service.features.map((feature, fIdx) => (
-                <li key={fIdx} className="flex items-center text-xs font-bold text-slate-300">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mr-3"></div>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <div className="pt-8 border-t border-slate-800/50">
-              <a href="#/contact" className="inline-flex items-center text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-white transition-colors">
-                Enquire Now <i className="fa-solid fa-arrow-right-long ml-3 group-hover:translate-x-2 transition-transform"></i>
-              </a>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-    <CTASection />
-  </div>
-);
-
-const About = () => (
-  <div className="bg-slate-950 animate-fade-in">
-    <section className="relative pt-48 pb-24 border-b border-slate-900 overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_75%_0%,rgba(99,102,241,0.1),transparent_70%)]"></div>
-      <div className="max-w-7xl mx-auto px-6 relative">
-        <SectionHeader badge="About Us" title="Architects of Innovation" subtitle="We are a multidisciplinary team dedicated to pushing digital boundaries." centered={false} />
-      </div>
-    </section>
-    <section className="py-24 px-6 max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center mb-32">
-        <div className="relative group overflow-hidden rounded-[2.5rem] md:rounded-[3rem] aspect-square bg-slate-900 border border-slate-800 flex items-center justify-center shadow-2xl">
-          <i className="fa-solid fa-layer-group text-8xl md:text-[150px] text-slate-800/40 group-hover:scale-110 transition-transform duration-1000"></i>
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
-          <div className="absolute bottom-10 left-10">
-            <div className="text-4xl md:text-5xl font-black text-white mb-2">Since 2024</div>
-            <div className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">Premium Standard</div>
-          </div>
-        </div>
-        <div className="space-y-10">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest">Our Story</span>
-          <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight leading-tight">Extreme technical excellence from the ground up.</h2>
-          <p className="text-slate-400 text-base md:text-xl leading-relaxed font-light">
-            At Gen7ven, we believe that the best digital products are born from the intersection of rigorous engineering standards and unbridled creative vision. 
-          </p>
-          <div className="grid grid-cols-2 gap-10 pt-4">
-            <div>
-              <div className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight">150+</div>
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Projects Launched</div>
-            </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight">98%</div>
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Success Rate</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <CTASection />
-  </div>
-);
-
-const Contact = () => {
-  const [formData, setFormData] = useState({ 
-    fullName: '', 
-    email: '', 
-    service: '', 
-    industry: '', 
-    message: '' 
-  });
-  const [errors, setErrors] = useState<any>({});
-  const [status, setStatus] = useState<'IDLE' | 'SUBMITTING' | 'SUCCESS' | 'ERROR'>('IDLE');
-
-  const services = ["UI/UX Design", "Web Development", "Mobile App Dev", "Brand Identity", "SEO & Marketing", "AI Solutions"];
-  const industries = ["Technology", "Healthcare", "Finance", "E-commerce", "Real Estate", "Education", "Entertainment", "Other"];
-
-  const validate = () => {
-    let newErrors: any = {};
-    if (!formData.fullName.trim()) newErrors.fullName = "Full Name is required";
-    if (!formData.email.trim()) {
-      newErrors.email = "Email Address is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-    if (!formData.service || formData.service === "Select Service") newErrors.service = "Please select a service";
-    if (!formData.industry || formData.industry === "Select Industry") newErrors.industry = "Please select an industry";
-    if (!formData.message.trim()) newErrors.message = "Message cannot be empty";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-    setStatus('SUBMITTING');
-    
-    try {
-      // Using FormSubmit AJAX endpoint
-      const response = await fetch("https://formsubmit.co/ajax/mason.liam1122@gmail.com", {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json", 
-          "Accept": "application/json" 
-        },
-        body: JSON.stringify({
-          ...formData,
-          _subject: `Gen7ven Digital Lead: ${formData.fullName}`,
-          _template: "table",
-          _captcha: "false" // Disable captcha for AJAX requests if possible
-        })
-      });
-      
-      const result = await response.json();
-      
-      if (response.ok && result.success === "true") {
-        setStatus('SUCCESS');
-        setFormData({ fullName: '', email: '', service: '', industry: '', message: '' });
-      } else {
-        setStatus('ERROR');
-      }
-    } catch (err) {
-      console.error("Submission error:", err);
-      setStatus('ERROR');
-    }
-  };
-
-  return (
-    <div className="bg-slate-950 animate-fade-in">
-      <section className="relative pt-48 pb-20 overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,0.1),transparent_75%)]"></div>
-        <div className="max-w-7xl mx-auto px-6 relative text-left">
-          <SectionHeader badge="Contact" title="Start a Conversation" subtitle="Ready to build something extraordinary? Our team is standing by." centered={false} />
-        </div>
-      </section>
-      
-      <section className="py-24 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20">
-          <div className="lg:col-span-4 space-y-12 order-2 lg:order-1">
-            <div className="space-y-10">
-              <h3 className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em] mb-10 text-left">Direct Connect</h3>
-              
-              <div className="flex gap-8 group">
-                <div className="w-14 h-14 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-center text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-lg shrink-0">
-                  <i className="fa-solid fa-envelope"></i>
-                </div>
-                <div>
-                  <h4 className="text-white font-extrabold text-base mb-1 text-left">Email Our Team</h4>
-                  <p className="text-slate-400 font-medium text-sm text-left">hello@gen7ven.agency</p>
-                </div>
-              </div>
-              
-              <div className="flex gap-8 group">
-                <div className="w-14 h-14 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-center text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-lg shrink-0">
-                  <i className="fa-solid fa-location-dot"></i>
-                </div>
-                <div>
-                  <h4 className="text-white font-extrabold text-base mb-1 text-left">Innovation Tower</h4>
-                  <p className="text-slate-400 font-medium text-sm leading-relaxed text-left">Level 24, Tech District<br/>London, United Kingdom</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="lg:col-span-8 order-1 lg:order-2">
-            {status === 'SUCCESS' ? (
-              <div className="bg-slate-900/40 border border-slate-800 p-12 md:p-20 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl text-center animate-scale-up">
-                <div className="w-20 md:w-24 h-20 md:h-24 bg-blue-600/20 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-10 animate-bounce">
-                  <i className="fa-solid fa-check text-4xl"></i>
-                </div>
-                <h2 className="text-3xl md:text-5xl font-black text-white mb-6">Proposal Received!</h2>
-                <p className="text-slate-400 mb-12 text-lg md:text-xl font-light">Thank you. Check your email shortly for our initial project assessment.</p>
-                <button 
-                  onClick={() => setStatus('IDLE')} 
-                  className="px-12 py-5 bg-blue-600 text-white font-black rounded-full hover:bg-blue-700 transition-all shadow-xl active:scale-95"
-                >
-                  Return to Form
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="bg-slate-900/40 border border-slate-800/80 p-8 md:p-16 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl backdrop-blur-md relative overflow-hidden">
-                {status === 'ERROR' && (
-                  <div className="mb-8 p-6 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-4 text-red-400 animate-fade-in">
-                    <i className="fa-solid fa-circle-xmark text-xl"></i>
-                    <div>
-                      <p className="font-bold">Submission failed</p>
-                      <p className="text-xs opacity-80">There was a problem sending your message. Please try again or contact us directly.</p>
-                    </div>
-                  </div>
-                )}
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
-                  <div className="mb-8">
-                    <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1 text-left">Full Name</label>
-                    <input 
-                      type="text" 
-                      name="name"
-                      placeholder="e.g. Alexander Pierce" 
-                      className={`w-full bg-slate-950/80 border ${errors.fullName ? 'border-red-500/50' : 'border-slate-800'} rounded-2xl px-6 py-4 md:py-5 text-slate-200 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-700 font-medium`} 
-                      value={formData.fullName} 
-                      onChange={(e) => setFormData({...formData, fullName: e.target.value})} 
-                    />
-                    {errors.fullName && <p className="mt-3 text-[10px] text-red-400 font-bold px-1 flex items-center animate-fade-in"><i className="fa-solid fa-circle-exclamation mr-2"></i>{errors.fullName}</p>}
-                  </div>
-                  
-                  <div className="mb-8">
-                    <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1 text-left">Email Address</label>
-                    <input 
-                      type="email" 
-                      name="email"
-                      placeholder="alex@enterprise.com" 
-                      className={`w-full bg-slate-950/80 border ${errors.email ? 'border-red-500/50' : 'border-slate-800'} rounded-2xl px-6 py-4 md:py-5 text-slate-200 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-700 font-medium`} 
-                      value={formData.email} 
-                      onChange={(e) => setFormData({...formData, email: e.target.value})} 
-                    />
-                    {errors.email && <p className="mt-3 text-[10px] text-red-400 font-bold px-1 flex items-center animate-fade-in"><i className="fa-solid fa-circle-exclamation mr-2"></i>{errors.email}</p>}
-                  </div>
-                  
-                  <CustomDropdown 
-                    label="Which Service you want ?" 
-                    options={services} 
-                    value={formData.service} 
-                    onChange={(val) => setFormData({...formData, service: val})} 
-                    error={errors.service} 
-                    placeholder="Select Service" 
-                  />
-                  
-                  <CustomDropdown 
-                    label="What industry are you in?" 
-                    options={industries} 
-                    value={formData.industry} 
-                    onChange={(val) => setFormData({...formData, industry: val})} 
-                    error={errors.industry} 
-                    placeholder="Select Industry" 
-                  />
-                </div>
-                
-                <div className="mb-12">
-                  <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1 text-left">Message</label>
-                  <textarea 
-                    rows={6} 
-                    name="message"
-                    placeholder="Describe your vision, goals, and timeline..." 
-                    className={`w-full bg-slate-950/80 border ${errors.message ? 'border-red-500/50' : 'border-slate-800'} rounded-2xl px-6 py-4 md:py-5 text-slate-200 focus:ring-4 focus:ring-blue-500/10 transition-all placeholder:text-slate-700 resize-none font-medium leading-relaxed`} 
-                    value={formData.message} 
-                    onChange={(e) => setFormData({...formData, message: e.target.value})} 
-                  />
-                  {errors.message && <p className="mt-3 text-[10px] text-red-400 font-bold px-1 flex items-center animate-fade-in"><i className="fa-solid fa-circle-exclamation mr-2"></i>{errors.message}</p>}
-                </div>
-                
-                <button 
-                  type="submit" 
-                  disabled={status === 'SUBMITTING'} 
-                  className="w-full py-5 md:py-6 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-black rounded-2xl transition-all shadow-2xl shadow-blue-600/30 active:scale-[0.98] flex items-center justify-center gap-4 text-lg md:text-xl group"
-                >
-                  {status === 'SUBMITTING' ? (
-                    <>
-                      <i className="fa-solid fa-circle-notch animate-spin"></i>
-                      Architecting Submission...
-                    </>
-                  ) : (
-                    <>
-                      Submit Proposal
-                      <i className="fa-solid fa-paper-plane text-sm group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-                    </>
-                  )}
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      </section>
-      
-      <CTASection />
-    </div>
-  );
-};
-
-// --- App Root ---
+import Hero from './components/Hero';
+import ServicesSection from './components/ServicesSection';
+import WhyChooseUs from './components/WhyChooseUs';
+import ProcessSection from './components/ProcessSection';
+import ProjectShowcaseSection from './components/ProjectShowcaseSection';
+import TechCapabilitiesSection from './components/TechCapabilitiesSection';
+import CTASection from './components/CTASection';
+import ContactForm from './components/ContactForm';
+import { SITE_INFO } from './data/siteData';
+import { PageType } from './types';
+import { Shield, Sparkles, Code2, Globe, Cpu, ArrowRight } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [currentHash, setCurrentHash] = useState(window.location.hash || '#/');
+  const [currentPage, setCurrentPage] = useState<PageType>('HOME');
 
   useEffect(() => {
     const handleHashChange = () => {
-      setCurrentHash(window.location.hash || '#/');
+      const hash = window.location.hash.toLowerCase();
+      if (hash.startsWith('#/services')) {
+        setCurrentPage('SERVICES');
+      } else if (hash.startsWith('#/about')) {
+        setCurrentPage('ABOUT');
+      } else if (hash.startsWith('#/contact')) {
+        setCurrentPage('CONTACT');
+      } else {
+        setCurrentPage('HOME');
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    
+
+    handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  const renderContent = () => {
-    const h = currentHash.toLowerCase();
-    if (h.includes('/services')) return <Services />;
-    if (h.includes('/about')) return <About />;
-    if (h.includes('/contact')) return <Contact />;
-    return <Home />;
-  };
-
   return (
-    <div className="relative min-h-screen selection:bg-blue-500/40 text-slate-200 bg-slate-950 flex flex-col">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       <Navbar />
-      <main className="flex-grow">
-        {renderContent()}
+
+      <main className="flex-grow pt-16">
+        {currentPage === 'HOME' && (
+          <div className="animate-fade-in">
+            <Hero />
+            <ServicesSection />
+            <WhyChooseUs />
+            <ProcessSection />
+            <ProjectShowcaseSection />
+            <TechCapabilitiesSection />
+            <CTASection />
+          </div>
+        )}
+
+        {currentPage === 'SERVICES' && (
+          <div className="animate-fade-in pt-12">
+            <header className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center py-12 md:py-16">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Novexa Solutions Capabilities</span>
+              </span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
+                Specialized Digital Services Engineered for Impact
+              </h1>
+              <p className="mt-6 text-slate-400 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto font-normal">
+                Explore our six core disciplines. From high-fidelity UI/UX design and scalable web infrastructure to native mobile apps, brand identities, technical SEO, and custom AI solutions.
+              </p>
+            </header>
+
+            <ServicesSection isFullPage={true} />
+            <ProcessSection />
+            <TechCapabilitiesSection />
+            <CTASection />
+          </div>
+        )}
+
+        {currentPage === 'ABOUT' && (
+          <div className="animate-fade-in pt-12">
+            <header className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center py-12 md:py-16">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+                <Shield className="w-3.5 h-3.5" />
+                <span>About Novexa Solutions</span>
+              </span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
+                Architecting Modern Technology Without Compromise
+              </h1>
+              <p className="mt-6 text-slate-400 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto font-normal">
+                Novexa Solutions is an independent digital technology agency based in the United Kingdom. We partner with ambitious enterprises and emerging ventures to engineer resilient software, elevate brand perception, and deploy purposeful artificial intelligence.
+              </p>
+            </header>
+
+            {/* Philosophy and Ethos Section */}
+            <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <div className="p-8 rounded-3xl bg-slate-900/60 border border-slate-800">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-6">
+                    <Code2 className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
+                    Engineering Integrity
+                  </h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    We do not rely on fragile quick-fixes or bloated boilerplate. Every system is built on strict type safety, modular separation of concerns, and clean architectural patterns designed for longevity.
+                  </p>
+                </div>
+
+                <div className="p-8 rounded-3xl bg-slate-900/60 border border-slate-800">
+                  <div className="w-12 h-12 rounded-2xl bg-cyan-600/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mb-6">
+                    <Cpu className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
+                    Commercial Pragmatism
+                  </h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Technology succeeds only when it drives measurable enterprise outcomes. Whether optimizing conversion paths, cutting AWS operational bills, or automating manual workflows, business impact is our north star.
+                  </p>
+                </div>
+
+                <div className="p-8 rounded-3xl bg-slate-900/60 border border-slate-800">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-6">
+                    <Globe className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
+                    Direct Partnership
+                  </h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Our clients work directly with senior software architects and design leads. We maintain transparent sprint backlogs, staging review links, and clear milestone progress.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <WhyChooseUs />
+            <ProjectShowcaseSection />
+            <TechCapabilitiesSection />
+            <CTASection />
+          </div>
+        )}
+
+        {currentPage === 'CONTACT' && (
+          <div className="animate-fade-in pt-12 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <header className="max-w-4xl mx-auto text-center py-10 md:py-16">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+                <Shield className="w-3.5 h-3.5" />
+                <span>Direct Inquiries</span>
+              </span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
+                Initiate Your Project Scoping
+              </h1>
+              <p className="mt-4 text-slate-400 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto font-normal">
+                Tell us about your digital product requirements. Submissions are reviewed directly by our leadership team and delivered to <span className="text-blue-400 font-semibold">{SITE_INFO.email}</span>.
+              </p>
+            </header>
+
+            <ContactForm />
+          </div>
+        )}
       </main>
+
       <Footer />
     </div>
   );

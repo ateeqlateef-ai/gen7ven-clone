@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { ChevronDown, AlertCircle } from 'lucide-react';
 
 interface CustomDropdownProps {
+  id?: string;
   label: string;
   options: string[];
   value: string;
@@ -9,7 +11,15 @@ interface CustomDropdownProps {
   placeholder?: string;
 }
 
-const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, options, value, onChange, error, placeholder = "Select one" }) => {
+const CustomDropdown: React.FC<CustomDropdownProps> = ({ 
+  id,
+  label, 
+  options, 
+  value, 
+  onChange, 
+  error, 
+  placeholder = "Select an option" 
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -28,30 +38,36 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, options, value, 
     setIsOpen(false);
   };
 
-  const isSelected = value && value !== placeholder;
+  const isSelected = Boolean(value && value !== placeholder);
 
   return (
-    <div className="mb-8 relative" ref={dropdownRef}>
-      <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">
+    <div className="mb-6 relative" ref={dropdownRef}>
+      <label 
+        htmlFor={id}
+        className="block text-xs font-semibold text-slate-400 mb-2 px-1 text-left"
+      >
         {label}
       </label>
       <div className="relative">
         <button
+          id={id}
           type="button"
           aria-haspopup="listbox"
           aria-expanded={isOpen}
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-full bg-slate-950/80 border ${error ? 'border-red-500/50' : 'border-slate-800'} rounded-2xl px-6 py-4 md:py-5 text-left flex justify-between items-center hover:border-blue-500/50 focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 shadow-inner group`}
+          className={`w-full bg-slate-950/80 border ${
+            error ? 'border-rose-500/80 ring-1 ring-rose-500/20' : 'border-slate-800 hover:border-slate-700 focus:border-blue-500'
+          } rounded-xl px-5 py-3.5 text-left flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 shadow-inner group`}
         >
-          <span className={`font-medium ${!isSelected ? "text-slate-700" : "text-slate-200"}`}>
+          <span className={`text-sm ${!isSelected ? "text-slate-500" : "text-slate-100 font-medium"}`}>
             {isSelected ? value : placeholder}
           </span>
-          <i className={`fa-solid fa-chevron-down text-slate-700 text-xs transition-transform duration-500 ${isOpen ? 'rotate-180 text-blue-500' : 'group-hover:text-slate-500'}`}></i>
+          <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-400' : 'group-hover:text-slate-300'}`} />
         </button>
 
         {isOpen && (
-          <div className="absolute z-[110] w-full mt-3 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl animate-fade-in animate-scale-up duration-200">
-            <div className="max-h-60 overflow-y-auto custom-scrollbar">
+          <div className="absolute z-[110] w-full mt-2 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl overflow-hidden backdrop-blur-2xl animate-fade-in duration-150">
+            <div className="max-h-60 overflow-y-auto custom-scrollbar p-1">
               {options.map((option, index) => (
                 <button
                   key={index}
@@ -59,10 +75,10 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, options, value, 
                   role="option"
                   aria-selected={option === value}
                   onClick={() => handleOptionClick(option)}
-                  className={`w-full text-left px-6 py-4 text-sm font-bold transition-all duration-200 ${
+                  className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors duration-150 ${
                     option === value 
-                      ? 'bg-blue-600 text-white' 
-                      : 'hover:bg-slate-800 text-slate-400 hover:text-white'
+                      ? 'bg-blue-600 text-white font-semibold' 
+                      : 'hover:bg-slate-800 text-slate-300 hover:text-white'
                   }`}
                 >
                   {option}
@@ -72,7 +88,12 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ label, options, value, 
           </div>
         )}
       </div>
-      {error && <p className="mt-3 text-[10px] text-red-400 font-bold px-1 flex items-center animate-fade-in"><i className="fa-solid fa-circle-exclamation mr-2"></i>{error}</p>}
+      {error && (
+        <p className="mt-2 text-xs text-rose-400 font-medium px-1 flex items-center gap-1.5 animate-fade-in">
+          <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+          <span>{error}</span>
+        </p>
+      )}
     </div>
   );
 };

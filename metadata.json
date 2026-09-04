@@ -1,5 +1,8 @@
 {
-  "name": "Gen7ven Digital Agency",
-  "description": "A high-end, dark-themed digital agency website architecture with multi-page navigation.",
-  "requestFramePermissions": []
+  "name": "Novexa Solutions",
+  "description": "Novexa Solutions is a digital technology agency providing UI/UX design, web development, mobile app development, brand identity, SEO marketing, and AI solutions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
