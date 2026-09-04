@@ -101,66 +101,34 @@ const ContactForm: React.FC = () => {
     setStatusMessage('');
 
     try {
-      // First attempt: Secure server-side /api/contact endpoint
-      let isSent = false;
-      try {
-        const apiResponse = await fetch('/api/contact', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(formData)
-        });
+      // Secure server-side email dispatch endpoint
+      const apiResponse = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
 
-        if (apiResponse.ok) {
-          const data = await apiResponse.json();
-          isSent = true;
-          setSubmitStatus('success');
-          setStatusMessage(
-            data.message || 
-            `Thank you! Your project details have been successfully received and dispatched to ${SITE_INFO.email}. Our team will follow up within 24 business hours.`
-          );
-        }
-      } catch (apiErr) {
-        console.warn('Server API endpoint unreachable, falling back to direct delivery transport:', apiErr);
-      }
+      const data = await apiResponse.json().catch(() => null);
 
-      // Fallback: If server endpoint was unreachable (e.g. preview mode), use direct AJAX transport
-      if (!isSent) {
-        const directRes = await fetch(`https://formsubmit.co/ajax/${SITE_INFO.email}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            fullName: formData.fullName.trim(),
-            email: formData.email.trim(),
-            company: formData.company.trim() || 'N/A',
-            service: formData.service,
-            budget: formData.budget || 'N/A',
-            message: formData.message.trim(),
-            _subject: `New Project Inquiry: ${formData.fullName.trim()} - Novexa Solutions`,
-            _template: 'table',
-            _captcha: 'false'
-          })
-        });
-
-        if (directRes.ok) {
-          setSubmitStatus('success');
-          setStatusMessage(
-            `Thank you! Your inquiry has been successfully delivered to ${SITE_INFO.email}. Our specialists will contact you shortly.`
-          );
-        } else {
-          throw new Error('Delivery transport returned non-200 status');
-        }
+      if (apiResponse.ok && data?.success) {
+        setSubmitStatus('success');
+        setStatusMessage(
+          data.message ||
+          `Thank you! Your inquiry has been dispatched to ${SITE_INFO.email}. Our team will review your requirements and follow up within 24 business hours.`
+        );
+      } else {
+        const errorMsg = data?.error || 'Unable to submit your request at this time. Please email us directly at ' + SITE_INFO.email;
+        setSubmitStatus('error');
+        setStatusMessage(errorMsg);
       }
     } catch (error) {
-      console.error('Contact submission error:', error);
+      console.error('Contact submission network error:', error);
       setSubmitStatus('error');
       setStatusMessage(
-        `We were unable to complete automated transmission. Please email your project requirements directly to our leadership team at ${SITE_INFO.email}.`
+        `A network connection error occurred while submitting. Please contact us directly at ${SITE_INFO.email}.`
       );
     } finally {
       setIsSubmitting(false);
