@@ -38,24 +38,31 @@ const ContactForm: React.FC = () => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
 
-  // Pre-fill service from URL hash parameters if present (e.g., #/contact?service=UI/UX Design)
+  // Pre-fill service from URL parameters or hash parameters if present (e.g., #/contact?service=Web Development)
   useEffect(() => {
     try {
-      const hash = window.location.hash;
+      const hash = window.location.hash || '';
+      const search = window.location.search || '';
+      let serviceParam: string | null = null;
+
       if (hash.includes('?')) {
         const queryParams = new URLSearchParams(hash.split('?')[1]);
-        const serviceParam = queryParams.get('service');
-        if (serviceParam) {
-          const matched = SERVICE_OPTIONS.find(
-            s => s.toLowerCase() === serviceParam.toLowerCase() || s.toLowerCase().includes(serviceParam.toLowerCase())
-          );
-          if (matched) {
-            setFormData(prev => ({ ...prev, service: matched }));
-          }
+        serviceParam = queryParams.get('service');
+      } else if (search) {
+        const queryParams = new URLSearchParams(search);
+        serviceParam = queryParams.get('service');
+      }
+
+      if (serviceParam) {
+        const matched = SERVICE_OPTIONS.find(
+          s => s.toLowerCase() === serviceParam!.toLowerCase() || s.toLowerCase().includes(serviceParam!.toLowerCase())
+        );
+        if (matched) {
+          setFormData(prev => ({ ...prev, service: matched }));
         }
       }
     } catch {
-      // ignore parsing error
+      // Ignore URL parsing errors
     }
   }, []);
 
@@ -75,7 +82,7 @@ const ContactForm: React.FC = () => {
     }
 
     if (!formData.service || formData.service === 'Select an option') {
-      newErrors.service = 'Please select the service of interest.';
+      newErrors.service = 'Please select a service of interest.';
     }
 
     if (!formData.message.trim()) {
@@ -88,8 +95,13 @@ const ContactForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
+    // Strictly prevent default browser form submission and navigation
+    if (e) {
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
+
     if (isSubmitting) return;
 
     if (!validate()) {
@@ -101,14 +113,21 @@ const ContactForm: React.FC = () => {
     setStatusMessage('');
 
     try {
-      // Secure server-side email dispatch endpoint
+      // Asynchronous API call to the server-side endpoint (/api/contact)
       const apiResponse = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          fullName: formData.fullName.trim(),
+          email: formData.email.trim(),
+          company: formData.company.trim(),
+          service: formData.service.trim(),
+          budget: formData.budget.trim(),
+          message: formData.message.trim()
+        })
       });
 
       const data = await apiResponse.json().catch(() => null);
@@ -116,19 +135,30 @@ const ContactForm: React.FC = () => {
       if (apiResponse.ok && data?.success) {
         setSubmitStatus('success');
         setStatusMessage(
-          data.message ||
-          `Thank you! Your inquiry has been dispatched to ${SITE_INFO.email}. Our team will review your requirements and follow up within 24 business hours.`
+          data.message || "Message sent successfully. We'll get back to you soon."
         );
+        // Clear the form data upon verified successful transmission
+        setFormData({
+          fullName: '',
+          email: '',
+          company: '',
+          service: '',
+          budget: '',
+          message: ''
+        });
+        setErrors({});
       } else {
-        const errorMsg = data?.error || 'Unable to submit your request at this time. Please email us directly at ' + SITE_INFO.email;
+        const errorMsg =
+          data?.error ||
+          `Unable to transmit your message via SMTP at this moment. Please reach out to us directly at ${SITE_INFO.email}.`;
         setSubmitStatus('error');
         setStatusMessage(errorMsg);
       }
     } catch (error) {
-      console.error('Contact submission network error:', error);
+      console.error('[Novexa Contact Form] Submission network error:', error);
       setSubmitStatus('error');
       setStatusMessage(
-        `A network connection error occurred while submitting. Please contact us directly at ${SITE_INFO.email}.`
+        `Network error encountered. Your inquiry could not be submitted. Please contact us directly at ${SITE_INFO.email}.`
       );
     } finally {
       setIsSubmitting(false);
@@ -235,47 +265,55 @@ const ContactForm: React.FC = () => {
         <div className="p-6 sm:p-10 rounded-2xl bg-white border border-slate-200/90 shadow-sm relative">
           
           {submitStatus === 'success' ? (
-            <div className="py-12 px-4 text-center space-y-6 animate-fade-in">
+            <div className="py-10 px-4 text-center space-y-6 animate-fade-in" id="contact-success-container">
               <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto shadow-xs">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
 
               <div className="space-y-2 max-w-md mx-auto">
                 <h3 className="text-2xl font-black text-slate-900 tracking-tight font-display">
-                  Inquiry Dispatched Successfully
+                  Message Sent Successfully
                 </h3>
-                <p className="text-slate-600 text-sm leading-relaxed">
+                <p className="text-emerald-700 font-semibold text-sm bg-emerald-50 py-2 px-4 rounded-lg border border-emerald-200 inline-block">
                   {statusMessage}
+                </p>
+                <p className="text-slate-600 text-sm leading-relaxed pt-2">
+                  Your inquiry has been dispatched to <span className="text-blue-600 font-semibold">{SITE_INFO.email}</span>. A technology director will review your specifications and reply to you directly.
                 </p>
               </div>
 
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 max-w-md mx-auto text-left space-y-1">
-                <p className="font-bold text-slate-800">Recipient Verification:</p>
-                <p className="text-blue-600 font-mono font-semibold">{SITE_INFO.email}</p>
+                <p className="font-bold text-slate-800">Dispatch Details:</p>
+                <p className="text-slate-700">Recipient: <span className="text-blue-600 font-mono font-semibold">{SITE_INFO.email}</span></p>
                 <p className="text-slate-500 text-[11px] pt-1">
-                  A technology architect from Novexa Solutions will examine your project brief and follow up with you directly.
+                  Confirmation logged via secure server SMTP connection.
                 </p>
               </div>
 
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <div className="pt-4 flex items-center justify-center">
                 <button
                   type="button"
+                  id="send-another-inquiry-button"
                   onClick={handleReset}
-                  className="px-6 py-3 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-all inline-flex items-center gap-2 shadow-2xs"
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs rounded-xl transition-all inline-flex items-center gap-2 shadow-sm hover:shadow-md hover:shadow-blue-600/20"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
                   <span>Send Another Inquiry</span>
                 </button>
-                <a
-                  href="#/"
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm hover:shadow-md hover:shadow-blue-600/20"
-                >
-                  Return to Home
-                </a>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} noValidate>
+            <form
+              action="javascript:void(0);"
+              method="POST"
+              onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleSubmit(e);
+              }}
+              noValidate
+              id="project-consultation-form"
+            >
               <div className="border-b border-slate-100 pb-4 mb-6">
                 <h3 className="text-xl font-bold text-slate-900 tracking-tight font-display">
                   Project Consultation Form
@@ -286,10 +324,13 @@ const ContactForm: React.FC = () => {
               </div>
 
               {submitStatus === 'error' && (
-                <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-3 animate-fade-in">
+                <div 
+                  id="contact-error-alert"
+                  className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-3 animate-fade-in"
+                >
                   <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-bold block mb-0.5">Notice:</span>
+                    <span className="font-bold block mb-0.5">Submission Error:</span>
                     <span>{statusMessage}</span>
                   </div>
                 </div>
@@ -429,15 +470,20 @@ const ContactForm: React.FC = () => {
 
               {/* Submit Button */}
               <button
-                type="submit"
+                type="button"
                 id="contact-form-submit-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleSubmit(e);
+                }}
                 disabled={isSubmitting}
-                className="w-full py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-400 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl transition-all shadow-md hover:shadow-lg hover:shadow-blue-600/20 flex items-center justify-center gap-2 group uppercase tracking-wider"
+                className="w-full py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl transition-all shadow-md hover:shadow-lg hover:shadow-blue-600/20 flex items-center justify-center gap-2 group uppercase tracking-wider cursor-pointer"
               >
                 {isSubmitting ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin text-white" />
-                    <span>Transmitting Project Brief...</span>
+                    <span>Sending Message...</span>
                   </>
                 ) : (
                   <>

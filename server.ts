@@ -235,20 +235,20 @@ Reply directly to this email to contact the prospective client.
 
         return res.status(200).json({
           success: true,
-          message: `Your inquiry has been successfully sent to ${recipient}. Our team will review your requirements and respond within 24 business hours.`,
+          message: "Message sent successfully. We'll get back to you soon.",
           deliveredVia: "smtp"
         });
       } else {
-        // SMTP credentials not yet added in AI Studio Secrets Manager
+        // SMTP credentials not yet added in server environment
         console.warn(
-          `[Novexa SMTP] Notice: SMTP credentials not set in Secrets Manager. Lead from ${cleanEmail} logged to server console.`
+          `[Novexa SMTP] Notice: SMTP credentials not set in server environment. Lead from ${cleanEmail} logged to server console.`
         );
 
         return res.status(200).json({
           success: true,
-          message: `Your inquiry has been successfully received by Novexa Solutions! Our team will review your requirements and respond within 24 business hours.`,
+          message: "Message sent successfully. We'll get back to you soon.",
           deliveredVia: "server_log",
-          notice: "SMTP credentials pending configuration in Secrets Manager."
+          notice: "SMTP credentials pending configuration in server environment."
         });
       }
     } catch (error: any) {

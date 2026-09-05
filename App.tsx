@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
@@ -13,17 +13,67 @@ import { SITE_INFO } from './data/siteData';
 import { PageType } from './types';
 import { Shield, Sparkles, Code2, Globe, Cpu } from 'lucide-react';
 
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  public override state: ErrorBoundaryState = { hasError: false };
+
+  public static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  public override componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('[Novexa Solutions] React render error:', error, errorInfo);
+  }
+
+  public override render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-[50vh] flex items-center justify-center p-6 text-center">
+          <div className="max-w-md p-8 bg-white border border-slate-200 rounded-2xl shadow-sm">
+            <h2 className="text-xl font-bold text-slate-900 mb-2">Something went wrong</h2>
+            <p className="text-slate-600 text-sm mb-6">
+              We encountered an issue rendering this section. Please click below to return to the home page.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                this.setState({ hasError: false });
+                window.location.hash = '';
+                window.location.href = '/';
+              }}
+              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm"
+            >
+              Return to Home
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<PageType>('HOME');
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.toLowerCase();
-      if (hash.startsWith('#/services')) {
+    const handleRoute = () => {
+      const hash = (window.location.hash || '').toLowerCase();
+      const pathname = (window.location.pathname || '').toLowerCase();
+
+      if (hash.startsWith('#/services') || pathname.startsWith('/services')) {
         setCurrentPage('SERVICES');
-      } else if (hash.startsWith('#/about')) {
+      } else if (hash.startsWith('#/about') || pathname.startsWith('/about')) {
         setCurrentPage('ABOUT');
-      } else if (hash.startsWith('#/contact')) {
+      } else if (hash.startsWith('#/contact') || pathname.startsWith('/contact')) {
         setCurrentPage('CONTACT');
       } else {
         setCurrentPage('HOME');
@@ -31,16 +81,21 @@ const App: React.FC = () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    handleRoute();
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('popstate', handleRoute);
+    return () => {
+      window.removeEventListener('hashchange', handleRoute);
+      window.removeEventListener('popstate', handleRoute);
+    };
   }, []);
 
   return (
     <div className="min-h-screen bg-white text-slate-700 flex flex-col font-sans selection:bg-[#BFDBFE] selection:text-[#0F172A]">
       <Navbar />
 
-      <main className="flex-grow pt-16">
+      <ErrorBoundary>
+        <main className="flex-grow pt-16">
         {currentPage === 'HOME' && (
           <div className="animate-fade-in">
             <Hero />
@@ -156,7 +211,8 @@ const App: React.FC = () => {
             <ContactForm />
           </div>
         )}
-      </main>
+        </main>
+      </ErrorBoundary>
 
       <Footer />
     </div>
