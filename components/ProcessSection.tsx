@@ -77,7 +77,7 @@ const ProcessSection: React.FC = () => {
           </div>
 
           <a
-            href="#/contact"
+            href="/contact"
             className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors uppercase tracking-wider"
           >
             <span>Plan Your Project Scope</span>

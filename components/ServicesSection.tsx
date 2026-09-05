@@ -117,7 +117,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isFullPage = false })
                   </span>
 
                   <a
-                    href={`#/contact?service=${encodeURIComponent(service.title)}`}
+                    href={`/contact?service=${encodeURIComponent(service.title)}`}
                     onClick={(e) => e.stopPropagation()}
                     className="text-xs font-bold text-slate-700 hover:text-blue-600 inline-flex items-center gap-1.5 transition-colors group/cta"
                   >
@@ -208,7 +208,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isFullPage = false })
               {/* Modal CTA */}
               <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100">
                 <a
-                  href={`#/contact?service=${encodeURIComponent(activeModalService.title)}`}
+                  href={`/contact?service=${encodeURIComponent(activeModalService.title)}`}
                   onClick={() => setActiveModalService(null)}
                   className="flex-1 py-3.5 px-5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all text-center flex items-center justify-center gap-2 shadow-sm"
                 >

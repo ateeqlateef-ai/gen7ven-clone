@@ -111,7 +111,7 @@ const ProjectShowcaseSection: React.FC = () => {
                 </div>
 
                 <a
-                  href={`#/contact?service=${encodeURIComponent(project.servicesProvided[0] || 'Web Development')}`}
+                  href={`/contact?service=${encodeURIComponent(project.servicesProvided[0] || 'Web Development')}`}
                   className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors uppercase tracking-wider group/cta"
                 >
                   <span>Inquire Similar</span>

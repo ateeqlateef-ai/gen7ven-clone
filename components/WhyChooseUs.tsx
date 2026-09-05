@@ -74,7 +74,7 @@ const WhyChooseUs: React.FC = () => {
           </div>
 
           <a
-            href="#/contact"
+            href="/contact"
             className="shrink-0 px-6 py-3.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs rounded-xl transition-all shadow-sm hover:shadow-md hover:shadow-blue-600/20 uppercase tracking-wider flex items-center gap-2"
           >
             <span>Schedule Scoping Session</span>

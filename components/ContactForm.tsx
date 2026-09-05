@@ -38,7 +38,7 @@ const ContactForm: React.FC = () => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
 
-  // Pre-fill service from URL parameters or hash parameters if present (e.g., #/contact?service=Web Development)
+  // Pre-fill service from URL parameters (e.g., /contact?service=Web Development) or fallback
   useEffect(() => {
     try {
       const hash = window.location.hash || '';

@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
           {/* Brand Column */}
           <div className="lg:col-span-4 space-y-5">
             <a 
-              href="#/" 
+              href="/" 
               id="footer-brand-logo"
               className="inline-flex items-center gap-3 text-slate-900 group focus:outline-none"
               aria-label="Novexa Solutions"
@@ -65,7 +65,7 @@ const Footer: React.FC = () => {
               {CORE_SERVICES.map((service) => (
                 <li key={service.id}>
                   <a 
-                    href={`#/services`} 
+                    href="/services" 
                     className="text-slate-600 hover:text-blue-600 transition-colors flex items-center group py-0.5"
                   >
                     <span className="group-hover:translate-x-1 transition-transform duration-200">
@@ -84,16 +84,16 @@ const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#/" className="text-slate-600 hover:text-blue-600 transition-colors">Home</a>
+                <a href="/" className="text-slate-600 hover:text-blue-600 transition-colors">Home</a>
               </li>
               <li>
-                <a href="#/services" className="text-slate-600 hover:text-blue-600 transition-colors">Services</a>
+                <a href="/services" className="text-slate-600 hover:text-blue-600 transition-colors">Services</a>
               </li>
               <li>
-                <a href="#/about" className="text-slate-600 hover:text-blue-600 transition-colors">About Us</a>
+                <a href="/about" className="text-slate-600 hover:text-blue-600 transition-colors">About Us</a>
               </li>
               <li>
-                <a href="#/contact" className="text-slate-600 hover:text-blue-600 transition-colors">Contact</a>
+                <a href="/contact" className="text-slate-600 hover:text-blue-600 transition-colors">Contact</a>
               </li>
             </ul>
           </div>
@@ -147,8 +147,8 @@ const Footer: React.FC = () => {
           </p>
           
           <div className="flex items-center space-x-6 text-xs text-slate-500">
-            <a href="#/services" className="hover:text-blue-600 transition-colors">Services</a>
-            <a href="#/about" className="hover:text-blue-600 transition-colors">About</a>
+            <a href="/services" className="hover:text-blue-600 transition-colors">Services</a>
+            <a href="/about" className="hover:text-blue-600 transition-colors">About</a>
             <a href={`mailto:${SITE_INFO.email}`} className="hover:text-blue-600 transition-colors">Inquiries</a>
             <span className="text-slate-300">|</span>
             <span className="flex items-center gap-1.5 text-slate-600">

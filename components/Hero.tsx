@@ -46,7 +46,7 @@ const Hero: React.FC = () => {
         {/* Primary Call-to-Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
           <a
-            href="#/contact"
+            href="/contact"
             id="hero-primary-cta"
             className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm md:text-base rounded-xl transition-all flex items-center justify-center gap-3 shadow-md hover:shadow-lg hover:shadow-blue-600/20 active:scale-[0.98] group"
           >
@@ -55,7 +55,7 @@ const Hero: React.FC = () => {
           </a>
           
           <a
-            href="#/services"
+            href="/services"
             id="hero-secondary-cta"
             className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-sky-50/60 border border-slate-200 hover:border-slate-300 text-slate-800 hover:text-blue-700 font-semibold text-sm md:text-base rounded-xl transition-all shadow-xs active:scale-[0.98] flex items-center justify-center gap-2"
           >

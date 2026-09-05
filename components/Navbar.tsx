@@ -3,37 +3,41 @@ import { Menu, X, ArrowRight } from 'lucide-react';
 import { SITE_INFO } from '../data/siteData';
 
 const Navbar: React.FC = () => {
-  const [currentHash, setCurrentHash] = useState(window.location.hash || '#/');
+  const [currentPath, setCurrentPath] = useState(
+    typeof window !== 'undefined' ? (window.location.pathname || '/') : '/'
+  );
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 15);
-    const handleHash = () => {
-      setCurrentHash(window.location.hash || '#/');
+    const handleLocation = () => {
+      setCurrentPath(window.location.pathname || '/');
       setIsMenuOpen(false);
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('hashchange', handleHash);
+    window.addEventListener('popstate', handleLocation);
+    window.addEventListener('hashchange', handleLocation);
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('popstate', handleLocation);
+      window.removeEventListener('hashchange', handleLocation);
     };
   }, []);
 
   const isActive = (path: string) => {
-    const h = currentHash.toLowerCase();
-    if (path === '#/' && (h === '' || h === '#/' || h === '#')) return true;
-    return h.startsWith(path.toLowerCase());
+    const p = currentPath.toLowerCase().replace(/\/+$/, '') || '/';
+    if (path === '/') return p === '/';
+    return p.startsWith(path.toLowerCase());
   };
 
   const navLinks = [
-    { name: 'Home', href: '#/' },
-    { name: 'Services', href: '#/services' },
-    { name: 'About', href: '#/about' },
-    { name: 'Contact', href: '#/contact' },
+    { name: 'Home', href: '/' },
+    { name: 'Services', href: '/services' },
+    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (
@@ -52,7 +56,7 @@ const Navbar: React.FC = () => {
           {/* Brand Logo Presentation (Clean Light Theme) */}
           <div className="flex-shrink-0">
             <a 
-              href="#/" 
+              href="/" 
               id="navbar-brand-logo"
               className="flex items-center gap-3 text-slate-900 group focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-xl p-1"
               aria-label="Novexa Solutions Homepage"
@@ -108,7 +112,7 @@ const Navbar: React.FC = () => {
           {/* Desktop CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
             <a 
-              href="#/contact" 
+              href="/contact" 
               id="navbar-cta-button"
               className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-xs font-bold rounded-xl transition-all shadow-sm hover:shadow-md hover:shadow-blue-600/20 active:scale-[0.98] tracking-wider uppercase"
             >
@@ -160,7 +164,7 @@ const Navbar: React.FC = () => {
           
           <div className="pt-3">
             <a
-              href="#/contact"
+              href="/contact"
               onClick={() => setIsMenuOpen(false)}
               className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider shadow-sm"
             >

@@ -11,6 +11,7 @@ import CTASection from './components/CTASection';
 import ContactForm from './components/ContactForm';
 import { SITE_INFO } from './data/siteData';
 import { PageType } from './types';
+import { getPageFromPath, navigate } from './utils/navigation';
 import { Shield, Sparkles, Code2, Globe, Cpu } from 'lucide-react';
 
 interface ErrorBoundaryProps {
@@ -46,7 +47,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               type="button"
               onClick={() => {
                 this.setState({ hasError: false });
-                window.location.hash = '';
                 window.location.href = '/';
               }}
               className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm"
@@ -62,33 +62,84 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 }
 
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<PageType>('HOME');
+  const [currentPage, setCurrentPage] = useState<PageType>(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash || '';
+      if (hash.startsWith('#/')) {
+        return getPageFromPath(hash.replace(/^#/, ''));
+      }
+      return getPageFromPath(window.location.pathname);
+    }
+    return 'HOME';
+  });
 
   useEffect(() => {
     const handleRoute = () => {
-      const hash = (window.location.hash || '').toLowerCase();
-      const pathname = (window.location.pathname || '').toLowerCase();
-
-      if (hash.startsWith('#/services') || pathname.startsWith('/services')) {
-        setCurrentPage('SERVICES');
-      } else if (hash.startsWith('#/about') || pathname.startsWith('/about')) {
-        setCurrentPage('ABOUT');
-      } else if (hash.startsWith('#/contact') || pathname.startsWith('/contact')) {
-        setCurrentPage('CONTACT');
-      } else {
-        setCurrentPage('HOME');
+      const hash = window.location.hash || '';
+      // Backward compatibility: upgrade legacy hash bookmarks to clean paths
+      if (hash.startsWith('#/')) {
+        const cleanPath = hash.replace(/^#/, '');
+        window.history.replaceState({}, '', cleanPath);
       }
+
+      const pathname = window.location.pathname || '/';
+      setCurrentPage(getPageFromPath(pathname));
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     handleRoute();
-    window.addEventListener('hashchange', handleRoute);
     window.addEventListener('popstate', handleRoute);
+    window.addEventListener('hashchange', handleRoute);
+
+    // Global click interceptor for clean internal links
+    const handleAnchorClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) {
+        return;
+      }
+      const target = (e.target as HTMLElement).closest('a');
+      if (!target) return;
+      const href = target.getAttribute('href');
+      if (!href) return;
+
+      // Ignore external links, mailto, tel, javascript, API routes, or protocol-relative links
+      if (
+        href.startsWith('http://') ||
+        href.startsWith('https://') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:') ||
+        href.startsWith('javascript:') ||
+        href.startsWith('/api/') ||
+        href.startsWith('//')
+      ) {
+        return;
+      }
+
+      // Handle clean internal paths starting with /
+      if (href.startsWith('/')) {
+        e.preventDefault();
+        navigate(href);
+      }
+    };
+
+    document.addEventListener('click', handleAnchorClick);
+
     return () => {
-      window.removeEventListener('hashchange', handleRoute);
       window.removeEventListener('popstate', handleRoute);
+      window.removeEventListener('hashchange', handleRoute);
+      document.removeEventListener('click', handleAnchorClick);
     };
   }, []);
+
+  // Synchronize document title with current clean route
+  useEffect(() => {
+    const titles: Record<PageType, string> = {
+      HOME: 'Novexa Solutions | Digital Technology Agency',
+      SERVICES: 'Our Services | Novexa Solutions',
+      ABOUT: 'About Us | Novexa Solutions',
+      CONTACT: 'Contact Us | Novexa Solutions',
+    };
+    document.title = titles[currentPage] || 'Novexa Solutions | Digital Technology Agency';
+  }, [currentPage]);
 
   return (
     <div className="min-h-screen bg-white text-slate-700 flex flex-col font-sans selection:bg-[#BFDBFE] selection:text-[#0F172A]">
