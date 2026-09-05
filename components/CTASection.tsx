@@ -6,10 +6,9 @@ const CTASection: React.FC = () => {
   return (
     <section id="cta-section" className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="max-w-6xl mx-auto relative">
-        {/* Glow ambient */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-tr from-blue-600/10 via-indigo-600/10 to-cyan-500/10 blur-[100px] rounded-[3rem] pointer-events-none -z-10"></div>
-
-        <div className="p-8 sm:p-12 md:p-16 rounded-[2.5rem] bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-blue-950/40 border border-slate-800 shadow-2xl relative overflow-hidden text-center md:text-left">
+        
+        {/* Card Container */}
+        <div className="p-8 sm:p-12 md:p-16 rounded-3xl bg-[#111622] border border-[#1e293b] shadow-2xl relative overflow-hidden text-center md:text-left">
           
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
             <div className="md:col-span-8 space-y-4">
@@ -18,7 +17,7 @@ const CTASection: React.FC = () => {
                 <span>Ready for Execution</span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight font-display">
                 Let's Architect Your Next Digital Breakthrough.
               </h2>
 
@@ -28,11 +27,11 @@ const CTASection: React.FC = () => {
 
               <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-slate-400">
                 <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                  <span>Transparent Fixed or Sprint-Based Engagements</span>
+                  <ShieldCheck className="w-4 h-4 text-blue-400" />
+                  <span>Structured Milestone Engagements</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Mail className="w-4 h-4 text-blue-400" />
+                  <Mail className="w-4 h-4 text-cyan-400" />
                   <span>{SITE_INFO.email}</span>
                 </span>
               </div>
@@ -42,15 +41,15 @@ const CTASection: React.FC = () => {
               <a
                 href="#/contact"
                 id="cta-start-project-btn"
-                className="w-full py-4 px-8 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-2xl transition-all shadow-xl shadow-blue-600/30 hover:shadow-blue-500/40 active:scale-95 flex items-center justify-center gap-2"
+                className="w-full py-4 px-8 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold text-sm rounded-xl transition-all shadow-lg shadow-blue-600/20 active:scale-[0.98] flex items-center justify-center gap-2 uppercase tracking-wider"
               >
-                <span>Initiate Project Consultation</span>
+                <span>Initiate Consultation</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
               <a
                 href={`mailto:${SITE_INFO.email}`}
-                className="w-full py-3.5 px-6 bg-slate-950/80 hover:bg-slate-900 border border-slate-800 text-slate-300 hover:text-white font-semibold text-xs rounded-2xl transition-all flex items-center justify-center gap-2"
+                className="w-full py-3.5 px-6 bg-[#07090e] hover:bg-[#0d1117] border border-[#1e293b] text-slate-300 hover:text-white font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-2"
               >
                 <Mail className="w-3.5 h-3.5" />
                 <span>Email Us Directly</span>

@@ -1,102 +1,149 @@
 
 <!DOCTYPE html>
-<html lang="en" class="bg-slate-950 text-slate-200 scroll-smooth">
+<html lang="en" class="bg-[#07090e] text-slate-200 scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Novexa Solutions | Digital Technology Agency</title>
-  <meta name="description" content="Novexa Solutions is a digital technology agency providing UI/UX design, web development, mobile app development, brand identity, SEO marketing, and AI solutions.">
-  <link rel="canonical" href="https://novexasolutions.uk">
+  <meta name="description" content="Novexa Solutions is an international digital technology agency providing UI/UX design, web development, mobile app development, brand identity, SEO marketing, and AI solutions.">
+  <link rel="canonical" href="https://novexasolutions.uk/">
   <meta property="og:title" content="Novexa Solutions | Digital Technology Agency">
-  <meta property="og:description" content="Novexa Solutions is a digital technology agency providing UI/UX design, web development, mobile app development, brand identity, SEO marketing, and AI solutions.">
-  <meta property="og:url" content="https://novexasolutions.uk">
+  <meta property="og:description" content="Novexa Solutions is an international digital technology agency providing UI/UX design, web development, mobile app development, brand identity, SEO marketing, and AI solutions.">
+  <meta property="og:url" content="https://novexasolutions.uk/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Novexa Solutions">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Novexa Solutions | Digital Technology Agency">
-  <meta name="twitter:description" content="Novexa Solutions is a digital technology agency providing UI/UX design, web development, mobile app development, brand identity, SEO marketing, and AI solutions.">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='nGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='50%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%236366f1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='48' height='48' rx='12' fill='%230b0f19'/%3E%3Cpath d='M14 34V14L23 27.5V14H27V34L18 20.5V34H14Z' fill='url(%23nGrad)'/%3E%3Ccircle cx='34' cy='16' r='3' fill='%2338bdf8'/%3E%3C/svg%3E">
+  <meta name="twitter:description" content="Novexa Solutions is an international digital technology agency providing UI/UX design, web development, mobile app development, brand identity, SEO marketing, and AI solutions.">
+  
+  <!-- Modern Geometric Monogram Favicon for Novexa Solutions -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='nxGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='50%25' stop-color='%232563eb'/%3E%3Cstop offset='100%25' stop-color='%231d4ed8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%2307090e' stroke='%231e293b' stroke-width='2'/%3E%3Cpath d='M18 46V18L32 37V18H40V46L26 27V46H18Z' fill='url(%23nxGrad)'/%3E%3Ccircle cx='46' cy='18' r='3.5' fill='%230ea5e9'/%3E%3C/svg%3E">
+
+  <!-- Google Fonts: Plus Jakarta Sans for UI & Space Grotesk for Headings -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            novexa: {
+              dark: '#07090e',
+              secondary: '#0d1117',
+              card: '#111622',
+              cardHover: '#151d2c',
+              border: '#1e293b',
+              borderHover: '#334155',
+              blue: '#2563eb',
+              blueHover: '#1d4ed8',
+              cyan: '#0ea5e9',
+              light: '#f8fafc',
+              body: '#94a3b8',
+              muted: '#64748b',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+            display: ['"Space Grotesk"', '"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-    
     :root {
       color-scheme: dark;
+      --bg-dark: #07090e;
+      --bg-card: #111622;
+      --border-color: #1e293b;
+      --primary-blue: #2563eb;
     }
 
     body { 
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #07090e;
+      color: #94a3b8;
       overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==========================================================================
+       TEXT SELECTION ENGINE FIX:
+       Prevents multi-line overlap, clipping, or transparent text collisions.
+       Ensures translucent high-contrast highlight across all elements.
+       ========================================================================== */
+    ::selection {
+      background-color: rgba(37, 99, 235, 0.38) !important;
+      color: #ffffff !important;
+      text-shadow: none !important;
+    }
+    ::-moz-selection {
+      background-color: rgba(37, 99, 235, 0.38) !important;
+      color: #ffffff !important;
+      text-shadow: none !important;
+    }
+
+    /* Fix selection on gradient/clipped text elements */
+    [class*="bg-clip-text"]::selection,
+    .text-gradient::selection,
+    h1::selection,
+    h2::selection,
+    h3::selection,
+    span::selection {
+      -webkit-text-fill-color: #ffffff !important;
+      background-color: rgba(37, 99, 235, 0.42) !important;
     }
 
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 7px;
     }
     ::-webkit-scrollbar-track {
-      background: #020617;
+      background: #07090e;
     }
     ::-webkit-scrollbar-thumb {
       background: #1e293b;
-      border-radius: 10px;
+      border-radius: 8px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #3b82f6;
+      background: #2563eb;
     }
 
-    /* Global Animations */
-    @keyframes fade-in {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    /* Typography Hierarchy & Contrast */
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+      color: #f8fafc;
+      letter-spacing: -0.025em;
     }
 
-    @keyframes fade-up {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes scale-up {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
-    }
-
-    .animate-fade-in { animation: fade-in 1s ease-out forwards; }
-    .animate-fade-up { animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .animate-scale-up { animation: scale-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .animate-shake { animation: shake 0.3s ease-in-out; }
-
-    .stagger-1 { animation-delay: 0.1s; }
-    .stagger-2 { animation-delay: 0.2s; }
-    .stagger-3 { animation-delay: 0.3s; }
-    
-    .text-gradient {
-      background: linear-gradient(to right, #60a5fa, #818cf8, #22d3ee);
+    /* Controlled, Elegant Accent Text */
+    .text-accent-gradient {
+      background: linear-gradient(135deg, #38bdf8 0%, #2563eb 50%, #60a5fa 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      display: inline;
     }
 
-    /* Hero Responsive Title */
-    .hero-title {
-      font-size: clamp(2.5rem, 8vw, 7.5rem);
-      line-height: 1.05;
-      letter-spacing: -0.04em;
-    }
-
-    /* Custom scrollbar for dropdowns */
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 4px;
+    /* Subtle Architectural Grid Background */
+    .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(30, 41, 59, 0.3) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 41, 59, 0.3) 1px, transparent 1px);
     }
   </style>
 </head>
-<body>
+<body class="bg-[#07090e] text-slate-300 antialiased selection:bg-blue-600/40 selection:text-white">
   <div id="root"></div>
   <script type="module" src="./index.tsx"></script>
 </body>
 </html>
+

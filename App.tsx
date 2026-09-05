@@ -37,7 +37,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-[#07090e] text-slate-200 flex flex-col font-sans">
       <Navbar />
 
       <main className="flex-grow pt-16">
@@ -56,7 +56,7 @@ const App: React.FC = () => {
         {currentPage === 'SERVICES' && (
           <div className="animate-fade-in pt-12">
             <header className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center py-12 md:py-16">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Novexa Solutions Capabilities</span>
               </span>
@@ -78,7 +78,7 @@ const App: React.FC = () => {
         {currentPage === 'ABOUT' && (
           <div className="animate-fade-in pt-12">
             <header className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center py-12 md:py-16">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
                 <Shield className="w-3.5 h-3.5" />
                 <span>About Novexa Solutions</span>
               </span>
@@ -93,8 +93,8 @@ const App: React.FC = () => {
             {/* Philosophy and Ethos Section */}
             <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <div className="p-8 rounded-3xl bg-slate-900/60 border border-slate-800">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-6">
+                <div className="p-8 rounded-2xl bg-[#111622] border border-[#1e293b] hover:border-[#334155] transition-all">
+                  <div className="w-12 h-12 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-6">
                     <Code2 className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
@@ -105,8 +105,8 @@ const App: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="p-8 rounded-3xl bg-slate-900/60 border border-slate-800">
-                  <div className="w-12 h-12 rounded-2xl bg-cyan-600/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mb-6">
+                <div className="p-8 rounded-2xl bg-[#111622] border border-[#1e293b] hover:border-[#334155] transition-all">
+                  <div className="w-12 h-12 rounded-xl bg-cyan-600/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center mb-6">
                     <Cpu className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
@@ -117,8 +117,8 @@ const App: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="p-8 rounded-3xl bg-slate-900/60 border border-slate-800">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-6">
+                <div className="p-8 rounded-2xl bg-[#111622] border border-[#1e293b] hover:border-[#334155] transition-all">
+                  <div className="w-12 h-12 rounded-xl bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-6">
                     <Globe className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
@@ -141,7 +141,7 @@ const App: React.FC = () => {
         {currentPage === 'CONTACT' && (
           <div className="animate-fade-in pt-12 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <header className="max-w-4xl mx-auto text-center py-10 md:py-16">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
                 <Shield className="w-3.5 h-3.5" />
                 <span>Direct Inquiries</span>
               </span>

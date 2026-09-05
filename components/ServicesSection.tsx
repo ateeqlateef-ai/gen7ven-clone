@@ -8,9 +8,12 @@ import {
   Bot, 
   ArrowRight, 
   CheckCircle2, 
+  X,
+  Layers,
   ChevronRight,
   ShieldCheck,
-  Zap
+  Zap,
+  Check
 } from 'lucide-react';
 import { CORE_SERVICES } from '../data/siteData';
 import { ServiceItem } from '../types';
@@ -29,76 +32,72 @@ interface ServicesSectionProps {
 }
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ isFullPage = false }) => {
-  const [selectedService, setSelectedService] = useState<ServiceItem>(CORE_SERVICES[0]);
+  const [activeModalService, setActiveModalService] = useState<ServiceItem | null>(null);
 
   return (
     <section 
       id="services-section"
-      className={`relative px-4 sm:px-6 lg:px-8 ${isFullPage ? 'py-16 md:py-24' : 'py-24 md:py-32'}`}
+      className={`relative px-4 sm:px-6 lg:px-8 ${isFullPage ? 'py-12 md:py-20' : 'py-20 md:py-32'}`}
     >
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
             <Zap className="w-3.5 h-3.5" />
             <span>Core Capabilities</span>
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight font-display">
             Six Specialized Pillars of Digital Excellence
           </h2>
           <p className="mt-4 text-slate-400 text-base sm:text-lg leading-relaxed font-normal">
-            Novexa Solutions provides end-to-end technical craftsmanship across modern design, engineering, and artificial intelligence.
+            Novexa Solutions provides disciplined, full-cycle technical execution across modern design, scalable engineering, and artificial intelligence.
           </p>
         </div>
 
-        {/* 6 Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+        {/* 6 Services Grid - Precision Dimensions, Cohesive Elevation & Hover */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {CORE_SERVICES.map((service, index) => {
-            const isSelected = selectedService.id === service.id;
             return (
-              <div
+              <article
                 key={service.id}
                 id={`service-card-${service.id}`}
-                className={`group relative p-8 rounded-3xl transition-all duration-300 flex flex-col justify-between border ${
-                  isSelected 
-                    ? 'bg-slate-900/90 border-blue-500/60 shadow-2xl shadow-blue-500/10' 
-                    : 'bg-slate-900/40 border-slate-800/80 hover:border-slate-700 hover:bg-slate-900/70 hover:-translate-y-1'
-                }`}
+                className="group relative p-7 sm:p-8 rounded-2xl bg-[#111622] border border-[#1e293b] hover:border-blue-500/50 hover:bg-[#151d2c] transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5 hover:shadow-xl hover:shadow-black/40"
               >
                 <div>
-                  {/* Top Bar with Number & Icon */}
+                  {/* Top Bar: Icon + Number Index */}
                   <div className="flex items-center justify-between mb-6">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                      isSelected 
-                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' 
-                        : 'bg-slate-800/80 text-blue-400 group-hover:bg-blue-600 group-hover:text-white'
-                    }`}>
+                    <div className="w-12 h-12 rounded-xl bg-[#07090e] border border-[#1e293b] text-blue-400 group-hover:text-white group-hover:bg-blue-600 group-hover:border-blue-500 flex items-center justify-center transition-all duration-300 group-hover:scale-105 shadow-sm">
                       {iconMap[service.iconName] || <Code className="w-6 h-6" />}
                     </div>
-                    <span className="text-xs font-black tracking-widest text-slate-600 group-hover:text-slate-400 uppercase">
+                    <span className="text-xs font-mono font-bold tracking-widest text-slate-500 group-hover:text-slate-300 uppercase">
                       0{index + 1}
                     </span>
                   </div>
 
-                  {/* Title & Short Desc */}
-                  <h3 className="text-xl md:text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-blue-300 transition-colors">
+                  {/* Title & Short Description */}
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-blue-300 transition-colors font-display">
                     {service.title}
                   </h3>
                   <p className="text-slate-400 text-sm leading-relaxed mb-6 font-normal">
                     {service.shortDesc}
                   </p>
 
-                  {/* Commercial Value Badge */}
-                  <div className="mb-6 p-3 rounded-xl bg-slate-950/60 border border-slate-800/60 text-xs">
-                    <span className="font-semibold text-slate-300 block mb-1">Commercial Impact:</span>
-                    <span className="text-slate-400">{service.businessValue}</span>
+                  {/* Commercial Impact Box */}
+                  <div className="mb-6 p-3.5 rounded-xl bg-[#07090e] border border-[#1e293b] text-xs">
+                    <span className="font-bold text-slate-300 block mb-1 flex items-center gap-1.5">
+                      <TrendingUp className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Commercial Impact</span>
+                    </span>
+                    <span className="text-slate-400 leading-normal block">
+                      {service.businessValue}
+                    </span>
                   </div>
 
-                  {/* Key Deliverables Bullet Points */}
+                  {/* Core Deliverables Preview */}
                   <div className="space-y-2 mb-6">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                      Core Deliverables:
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+                      Key Deliverables:
                     </span>
                     {service.deliverables.slice(0, 3).map((item, idx) => (
                       <div key={idx} className="flex items-start gap-2 text-xs text-slate-300">
@@ -109,124 +108,128 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isFullPage = false })
                   </div>
                 </div>
 
-                {/* Card Footer Actions */}
-                <div className="pt-6 border-t border-slate-800/80 flex items-center justify-between mt-auto">
+                {/* Card Action Footer */}
+                <div className="pt-6 border-t border-[#1e293b] flex items-center justify-between mt-auto">
                   <button
                     type="button"
-                    onClick={() => setSelectedService(service)}
-                    className="text-xs font-bold text-blue-400 hover:text-blue-300 inline-flex items-center gap-1.5 focus:outline-none"
+                    onClick={() => setActiveModalService(service)}
+                    className="text-xs font-bold text-blue-400 hover:text-blue-300 inline-flex items-center gap-1 focus:outline-none transition-colors"
                   >
-                    <span>View Specifications</span>
+                    <span>Full Specifications</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </button>
 
                   <a
                     href={`#/contact?service=${encodeURIComponent(service.title)}`}
-                    className="text-xs font-semibold text-slate-400 hover:text-white inline-flex items-center gap-1 group/link"
+                    className="text-xs font-semibold text-slate-300 hover:text-white inline-flex items-center gap-1.5 transition-colors group/cta"
                   >
                     <span>Enquire</span>
-                    <ArrowRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
+                    <ArrowRight className="w-3.5 h-3.5 text-blue-400 group-hover/cta:translate-x-1 transition-transform" />
                   </a>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
 
-        {/* Deep Dive Specification Modal / Detail Drawer for Selected Service */}
-        <div className="p-6 md:p-10 bg-slate-900/70 border border-slate-800 rounded-3xl backdrop-blur-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none"></div>
+        {/* Detailed Modal Specifications Drawer */}
+        {activeModalService && (
+          <div 
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-service-title"
+          >
+            <div className="relative w-full max-w-2xl bg-[#111622] border border-[#1e293b] rounded-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto shadow-2xl shadow-black/50">
+              
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setActiveModalService(null)}
+                className="absolute top-5 right-5 p-2 rounded-xl bg-[#07090e] border border-[#1e293b] text-slate-400 hover:text-white transition-colors"
+                aria-label="Close service specification details"
+              >
+                <X className="w-5 h-5" />
+              </button>
 
-          <div className="relative z-10">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-800/80 pb-6 mb-8">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/20">
-                  {iconMap[selectedService.iconName]}
+              {/* Modal Header */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center">
+                  {iconMap[activeModalService.iconName]}
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-widest text-blue-400">
-                    Service Deep Dive
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-400 block">
+                    Novexa Discipline Specification
                   </span>
-                  <h3 className="text-2xl md:text-3xl font-black text-white">
-                    {selectedService.title}
+                  <h3 id="modal-service-title" className="text-2xl font-bold text-white font-display">
+                    {activeModalService.title}
                   </h3>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
-                <a
-                  href={`#/contact?service=${encodeURIComponent(selectedService.title)}`}
-                  className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-full transition-all shadow-md shadow-blue-600/30 inline-flex items-center gap-2"
-                >
-                  <span>Request {selectedService.title} Consultation</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
+              {/* Full Description */}
+              <p className="text-slate-300 text-sm leading-relaxed mb-6">
+                {activeModalService.fullDesc}
+              </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
-              {/* Comprehensive Description */}
-              <div className="space-y-4">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  Architecture & Scope
-                </h4>
-                <p className="text-slate-300 text-sm leading-relaxed">
-                  {selectedService.fullDesc}
-                </p>
-                <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800">
-                  <div className="flex items-center gap-2 text-xs font-bold text-slate-200 mb-1">
-                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>The Problem We Solve</span>
-                  </div>
-                  <p className="text-slate-400 text-xs leading-relaxed">
-                    {selectedService.problemSolved}
-                  </p>
+              {/* Problem Solved */}
+              <div className="p-4 rounded-xl bg-[#07090e] border border-[#1e293b] mb-6 text-xs sm:text-sm">
+                <span className="font-bold text-white block mb-1">Problem Solved:</span>
+                <span className="text-slate-400">{activeModalService.problemSolved}</span>
+              </div>
+
+              {/* All Deliverables */}
+              <div className="mb-6">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-3">
+                  Scope of Deliverables:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {activeModalService.deliverables.map((del, i) => (
+                    <div key={i} className="flex items-start gap-2 p-2 rounded-lg bg-[#07090e]/60 text-xs text-slate-300 border border-[#1e293b]/60">
+                      <Check className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
+                      <span>{del}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Complete Deliverables */}
-              <div className="space-y-4">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  Detailed Deliverables
-                </h4>
-                <ul className="space-y-2.5">
-                  {selectedService.deliverables.map((del, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs text-slate-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5 shrink-0"></span>
-                      <span className="leading-snug">{del}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Technologies & Tech Alignment */}
-              <div className="space-y-4">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  Technology Alignment
-                </h4>
+              {/* Tech Stack Chips */}
+              <div className="mb-8">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                  Tooling & Frameworks:
+                </span>
                 <div className="flex flex-wrap gap-2">
-                  {selectedService.technologies.map((tech, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-slate-300 text-xs font-mono"
-                    >
+                  {activeModalService.technologies.map((tech, i) => (
+                    <span key={i} className="px-3 py-1 rounded-md bg-[#07090e] border border-[#1e293b] text-xs font-mono text-slate-300">
                       {tech}
                     </span>
                   ))}
                 </div>
-
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-900/20 to-indigo-900/20 border border-blue-500/20">
-                  <span className="text-xs font-bold text-blue-300 block mb-1">
-                    Why Choose Novexa for {selectedService.title}
-                  </span>
-                  <p className="text-slate-400 text-xs leading-relaxed">
-                    Direct technical access, transparent sprints, and solutions designed to directly advance your enterprise revenue and operational speed.
-                  </p>
-                </div>
               </div>
+
+              {/* Modal CTA */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[#1e293b]">
+                <a
+                  href={`#/contact?service=${encodeURIComponent(activeModalService.title)}`}
+                  onClick={() => setActiveModalService(null)}
+                  className="flex-1 py-3 px-5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all text-center flex items-center justify-center gap-2 shadow-md"
+                >
+                  <span>Scope This Project With Us</span>
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveModalService(null)}
+                  className="py-3 px-5 bg-[#07090e] border border-[#1e293b] hover:border-slate-700 text-slate-300 text-xs font-semibold rounded-xl transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+
             </div>
           </div>
-        </div>
+        )}
 
       </div>
     </section>
