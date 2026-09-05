@@ -19,21 +19,21 @@ const ProjectShowcaseSection: React.FC = () => {
   return (
     <section 
       id="portfolio-section"
-      className="py-20 md:py-32 px-4 sm:px-6 lg:px-8 bg-[#0a0e17] border-t border-[#1e293b] relative overflow-hidden"
+      className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 bg-white relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-left">
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
               <Layers className="w-3.5 h-3.5" />
               <span>Engineered Solutions</span>
             </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight font-display">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight font-display">
               Featured Systems & Case Architectures
             </h2>
-            <p className="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed font-normal">
+            <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed font-normal">
               Explore exemplar production architectures designed by Novexa Solutions across real-time web platforms, cross-platform mobile apps, and enterprise AI pipelines.
             </p>
           </div>
@@ -47,8 +47,8 @@ const ProjectShowcaseSection: React.FC = () => {
                 onClick={() => setFilter(cat)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wide transition-all ${
                   filter === cat
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                    : 'bg-[#111622] border border-[#1e293b] text-slate-400 hover:text-white hover:border-slate-700'
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300'
                 }`}
               >
                 {cat}
@@ -62,35 +62,35 @@ const ProjectShowcaseSection: React.FC = () => {
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="group p-7 sm:p-8 rounded-2xl bg-[#111622] border border-[#1e293b] hover:border-blue-500/40 hover:bg-[#151d2c] transition-all duration-300 flex flex-col justify-between text-left relative overflow-hidden shadow-lg"
+              className="group p-7 sm:p-8 rounded-2xl bg-white border border-slate-200/90 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300 flex flex-col justify-between text-left relative overflow-hidden shadow-2xs"
             >
               <div>
                 {/* Category & Badge */}
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
                     {project.category}
                   </span>
-                  <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-md bg-[#07090e] border border-[#1e293b] text-slate-400">
+                  <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-md bg-sky-50 border border-sky-100 text-sky-700">
                     Architecture
                   </span>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-blue-200 transition-colors font-display">
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 tracking-tight group-hover:text-blue-600 transition-colors font-display">
                   {project.title}
                 </h3>
 
-                <p className="text-slate-400 text-sm leading-relaxed mb-6 font-normal">
+                <p className="text-slate-600 text-sm leading-relaxed mb-6 font-normal">
                   {project.description}
                 </p>
 
                 {/* Key Architectural Outcomes */}
-                <div className="space-y-2 mb-6 p-4 rounded-xl bg-[#07090e] border border-[#1e293b]">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
+                <div className="space-y-2 mb-6 p-4 rounded-xl bg-[#F5FAFF] border border-sky-100">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
                     Architectural Milestones & Outcomes:
                   </span>
                   {project.outcomes.map((outcome, oIdx) => (
-                    <div key={oIdx} className="flex items-start gap-2 text-xs text-slate-300">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
+                    <div key={oIdx} className="flex items-start gap-2 text-xs text-slate-700">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
                       <span className="leading-snug">{outcome}</span>
                     </div>
                   ))}
@@ -98,12 +98,12 @@ const ProjectShowcaseSection: React.FC = () => {
               </div>
 
               {/* Technologies & CTA */}
-              <div className="pt-6 border-t border-[#1e293b] flex flex-wrap items-center justify-between gap-3">
+              <div className="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap gap-1.5">
                   {project.servicesProvided.map((service, sIdx) => (
                     <span
                       key={sIdx}
-                      className="px-2.5 py-0.5 rounded-md bg-[#07090e] border border-[#1e293b] text-[11px] font-medium text-slate-300"
+                      className="px-2.5 py-0.5 rounded-md bg-slate-100 border border-slate-200/80 text-[11px] font-medium text-slate-700"
                     >
                       {service}
                     </span>
@@ -112,10 +112,10 @@ const ProjectShowcaseSection: React.FC = () => {
 
                 <a
                   href={`#/contact?service=${encodeURIComponent(project.servicesProvided[0] || 'Web Development')}`}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors uppercase tracking-wider"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors uppercase tracking-wider group/cta"
                 >
                   <span>Inquire Similar</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-3.5 h-3.5 group-hover/cta:translate-x-1 transition-transform" />
                 </a>
               </div>
             </div>

@@ -44,7 +44,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
     <div className="mb-4 relative" ref={dropdownRef}>
       <label 
         htmlFor={id}
-        className="block text-xs font-semibold text-slate-400 mb-2 px-1 text-left"
+        className="block text-xs font-bold text-slate-700 mb-2 px-1 text-left"
       >
         {label}
       </label>
@@ -55,19 +55,21 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
           aria-haspopup="listbox"
           aria-expanded={isOpen}
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-full bg-[#07090e] border ${
-            error ? 'border-rose-500 ring-1 ring-rose-500/20' : 'border-[#1e293b] hover:border-slate-600 focus:border-blue-500'
-          } rounded-xl px-4 py-3 text-left flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 group`}
+          className={`w-full bg-white border ${
+            error 
+              ? 'border-rose-500 ring-2 ring-rose-500/10' 
+              : 'border-slate-200 hover:border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20'
+          } rounded-xl px-4 py-3 text-left flex justify-between items-center focus:outline-none transition-all duration-200 shadow-2xs group`}
         >
-          <span className={`text-sm ${!isSelected ? "text-slate-500" : "text-slate-100 font-medium"}`}>
+          <span className={`text-sm ${!isSelected ? "text-slate-400" : "text-slate-900 font-medium"}`}>
             {isSelected ? value : placeholder}
           </span>
-          <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-400' : 'group-hover:text-slate-300'}`} />
+          <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-600' : 'group-hover:text-slate-600'}`} />
         </button>
 
         {isOpen && (
-          <div className="absolute z-[110] w-full mt-2 bg-[#111622] border border-[#1e293b] rounded-xl shadow-2xl overflow-hidden backdrop-blur-xl animate-fade-in duration-150">
-            <div className="max-h-60 overflow-y-auto custom-scrollbar p-1.5 space-y-1">
+          <div className="absolute z-[110] w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden animate-fade-in duration-150">
+            <div className="max-h-60 overflow-y-auto p-1.5 space-y-1">
               {options.map((option, index) => (
                 <button
                   key={index}
@@ -78,7 +80,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
                   className={`w-full text-left px-3.5 py-2.5 rounded-lg text-xs font-medium transition-colors duration-150 ${
                     option === value 
                       ? 'bg-blue-600 text-white font-semibold' 
-                      : 'hover:bg-[#151d2c] text-slate-300 hover:text-white'
+                      : 'hover:bg-sky-50 text-slate-700 hover:text-blue-700'
                   }`}
                 >
                   {option}
@@ -89,7 +91,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         )}
       </div>
       {error && (
-        <p className="mt-1.5 text-xs text-rose-400 font-medium px-1 flex items-center gap-1.5 animate-fade-in">
+        <p className="mt-1.5 text-xs text-rose-600 font-medium px-1 flex items-center gap-1.5 animate-fade-in">
           <AlertCircle className="w-3.5 h-3.5 shrink-0" />
           <span>{error}</span>
         </p>

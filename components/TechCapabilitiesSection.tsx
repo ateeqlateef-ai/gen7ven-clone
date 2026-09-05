@@ -1,59 +1,55 @@
 import React from 'react';
-import { Terminal } from 'lucide-react';
+import { Terminal, Cpu } from 'lucide-react';
 import { TECH_CAPABILITIES } from '../data/siteData';
 
 const TechCapabilitiesSection: React.FC = () => {
   return (
     <section 
-      id="technologies-section"
-      className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 bg-[#07090e] border-t border-[#1e293b] relative"
+      id="tech-capabilities-section"
+      className="py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-[#F5FAFF] border-y border-slate-200/80 relative"
     >
-      <div className="max-w-7xl mx-auto text-left">
+      <div className="max-w-7xl mx-auto">
         
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-          <div>
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-3">
-              <Terminal className="w-3.5 h-3.5" />
-              <span>Technology Ecosystem</span>
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight font-display">
-              Modern Tooling for Resilient Software
-            </h2>
-          </div>
-          <p className="text-slate-400 text-xs sm:text-sm max-w-md leading-relaxed">
-            We build with production-hardened frameworks and maintain strict architectural discipline across every layer of the technology stack.
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-100 border border-sky-200 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
+            <Cpu className="w-3.5 h-3.5" />
+            <span>Modern Technology Stack</span>
+          </span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight font-display">
+            Built with Industry-Standard Tooling
+          </h2>
+          <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed font-normal">
+            We avoid volatile hype, selecting proven, battle-tested technologies that deliver enterprise reliability, low latency, and zero vendor lock-in.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {TECH_CAPABILITIES.map((group, idx) => (
+        {/* Tech Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {TECH_CAPABILITIES.map((cap, idx) => (
             <div
               key={idx}
-              className="p-6 rounded-2xl bg-[#111622] border border-[#1e293b] flex flex-col justify-between"
+              className="p-6 sm:p-7 rounded-2xl bg-white border border-slate-200/90 shadow-2xs text-left hover:border-blue-300 transition-all"
             >
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 mb-4">
-                  {group.category}
+              <div className="flex items-center gap-2.5 mb-5 pb-3 border-b border-slate-100">
+                <Terminal className="w-4 h-4 text-blue-600" />
+                <h3 className="text-sm font-bold text-slate-900 tracking-wide uppercase font-display">
+                  {cap.category}
                 </h3>
-                <div className="flex flex-wrap gap-2">
-                  {group.technologies.map((item, tIdx) => (
-                    <span
-                      key={tIdx}
-                      className="px-2.5 py-1 rounded-md bg-[#07090e] border border-[#1e293b] text-xs font-mono text-slate-300 hover:text-white hover:border-slate-700 transition-colors"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {cap.technologies.map((tech, tIdx) => (
+                  <span
+                    key={tIdx}
+                    className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-mono font-medium text-slate-700 hover:text-blue-600 hover:border-blue-200 transition-colors"
+                  >
+                    {tech}
+                  </span>
+                ))}
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Technical Guarantee strip */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400 border-t border-[#1e293b] pt-6">
-          <span>Production Stack Assurance: Clean typing, zero critical vulnerabilities, automated CI testing.</span>
-          <span className="font-mono text-blue-400">novexasolutions.uk/specs</span>
         </div>
 
       </div>
