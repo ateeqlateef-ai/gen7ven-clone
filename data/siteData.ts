@@ -5,7 +5,7 @@ export const SITE_INFO = {
   legalName: 'Novexa Solutions',
   tagline: 'Engineering the Next Generation of Digital Realities',
   domain: 'novexasolutions.uk',
-  url: 'https://novexasolutions.uk',
+  url: 'https://www.novexasolutions.uk',
   email: 'contact@novexasolutions.uk',
   headquarters: 'United Kingdom',
   operatingHours: 'Monday – Friday, 09:00 – 18:00 GMT',

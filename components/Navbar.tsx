@@ -63,7 +63,8 @@ const Navbar: React.FC = () => {
             >
               {/* Minimalist Architectural Symbol on Light Canvas */}
               <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 group-hover:border-blue-300 flex items-center justify-center transition-colors shadow-xs">
-                <svg viewBox="0 0 40 40" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 40 40" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Novexa Solutions Logomark">
+                  <title>Novexa Solutions Logomark</title>
                   <path d="M10 30V10L22 25V10H28V30L16 15V30H10Z" fill="url(#brandGradLight)" />
                   <circle cx="32" cy="11" r="2.5" fill="#0ea5e9" />
                   <defs>

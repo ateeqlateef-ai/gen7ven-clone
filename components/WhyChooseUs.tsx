@@ -65,9 +65,9 @@ const WhyChooseUs: React.FC = () => {
             <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
               Direct Technical Leadership
             </span>
-            <h4 className="text-xl font-bold text-slate-900 font-display">
+            <h3 className="text-xl font-bold text-slate-900 font-display">
               Zero Hand-Off Friction. Direct Architect Access.
-            </h4>
+            </h3>
             <p className="text-slate-600 text-xs sm:text-sm max-w-2xl leading-relaxed">
               Collaborate directly with senior software architects and design leads who take total ownership of technical deliverables and milestone sprints.
             </p>

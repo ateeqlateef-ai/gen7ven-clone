@@ -12,6 +12,7 @@ import ContactForm from './components/ContactForm';
 import { SITE_INFO } from './data/siteData';
 import { PageType } from './types';
 import { getPageFromPath, navigate } from './utils/navigation';
+import { updatePageSEO } from './utils/seo';
 import { Shield, Sparkles, Code2, Globe, Cpu } from 'lucide-react';
 
 interface ErrorBoundaryProps {
@@ -130,15 +131,9 @@ const App: React.FC = () => {
     };
   }, []);
 
-  // Synchronize document title with current clean route
+  // Synchronize document title, meta descriptions, canonicals, and structured data with current route
   useEffect(() => {
-    const titles: Record<PageType, string> = {
-      HOME: 'Novexa Solutions | Digital Technology Agency',
-      SERVICES: 'Our Services | Novexa Solutions',
-      ABOUT: 'About Us | Novexa Solutions',
-      CONTACT: 'Contact Us | Novexa Solutions',
-    };
-    document.title = titles[currentPage] || 'Novexa Solutions | Digital Technology Agency';
+    updatePageSEO(currentPage);
   }, [currentPage]);
 
   return (
@@ -162,6 +157,13 @@ const App: React.FC = () => {
         {currentPage === 'SERVICES' && (
           <div className="animate-fade-in pt-8">
             <header className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center py-12 md:py-16">
+              {/* Semantic Breadcrumb Navigation */}
+              <nav aria-label="Breadcrumb" className="mb-5 flex items-center justify-center gap-2 text-xs font-medium text-slate-500">
+                <a href="/" className="hover:text-blue-600 transition-colors">Home</a>
+                <span className="text-slate-300" aria-hidden="true">/</span>
+                <span className="text-slate-900 font-semibold" aria-current="page">Services</span>
+              </nav>
+
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Novexa Solutions Capabilities</span>
@@ -170,7 +172,7 @@ const App: React.FC = () => {
                 Specialized Digital Services Engineered for Impact
               </h1>
               <p className="mt-5 text-slate-600 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto font-normal">
-                Explore our six core disciplines. From high-fidelity UI/UX design and scalable web infrastructure to native mobile apps, brand identities, technical SEO, and custom AI solutions.
+                Explore our six core disciplines. From high-fidelity UI/UX design and scalable web development to native mobile apps, brand identities, technical SEO marketing, and custom AI solutions.
               </p>
             </header>
 
@@ -184,6 +186,13 @@ const App: React.FC = () => {
         {currentPage === 'ABOUT' && (
           <div className="animate-fade-in pt-8">
             <header className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center py-12 md:py-16">
+              {/* Semantic Breadcrumb Navigation */}
+              <nav aria-label="Breadcrumb" className="mb-5 flex items-center justify-center gap-2 text-xs font-medium text-slate-500">
+                <a href="/" className="hover:text-blue-600 transition-colors">Home</a>
+                <span className="text-slate-300" aria-hidden="true">/</span>
+                <span className="text-slate-900 font-semibold" aria-current="page">About Us</span>
+              </nav>
+
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
                 <Shield className="w-3.5 h-3.5" />
                 <span>About Novexa Solutions</span>
@@ -192,12 +201,25 @@ const App: React.FC = () => {
                 Architecting Modern Technology Without Compromise
               </h1>
               <p className="mt-5 text-slate-600 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto font-normal">
-                Novexa Solutions is an independent digital technology agency based in the United Kingdom. We partner with ambitious enterprises and emerging ventures to engineer resilient software, elevate brand perception, and deploy purposeful artificial intelligence.
+                Novexa Solutions is an independent digital technology agency based in the United Kingdom. We partner with ambitious enterprises and emerging ventures to engineer resilient software, elevate brand perception, and deploy purposeful artificial intelligence across our <a href="/services" className="text-blue-600 font-semibold hover:underline">six core digital disciplines</a>.
               </p>
             </header>
 
-            {/* Philosophy and Ethos Section */}
-            <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            {/* Philosophy and Ethos Section with Proper H2 Hierarchy */}
+            <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" aria-labelledby="about-values-heading">
+              <div className="text-center max-w-3xl mx-auto mb-12">
+                <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Foundational Values</span>
+                </span>
+                <h2 id="about-values-heading" className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-display">
+                  Core Engineering Philosophy & Commercial Values
+                </h2>
+                <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed">
+                  How our senior technology leads turn complex technical challenges into durable, high-yield digital assets.
+                </p>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                 <div className="p-8 rounded-2xl bg-white border border-slate-200/90 hover:border-blue-300 shadow-2xs transition-all">
                   <div className="w-12 h-12 rounded-xl bg-sky-50 border border-sky-100 text-blue-600 flex items-center justify-center mb-6 shadow-2xs">
@@ -247,6 +269,13 @@ const App: React.FC = () => {
         {currentPage === 'CONTACT' && (
           <div className="animate-fade-in pt-8 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <header className="max-w-4xl mx-auto text-center py-10 md:py-16">
+              {/* Semantic Breadcrumb Navigation */}
+              <nav aria-label="Breadcrumb" className="mb-5 flex items-center justify-center gap-2 text-xs font-medium text-slate-500">
+                <a href="/" className="hover:text-blue-600 transition-colors">Home</a>
+                <span className="text-slate-300" aria-hidden="true">/</span>
+                <span className="text-slate-900 font-semibold" aria-current="page">Contact</span>
+              </nav>
+
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
                 <Shield className="w-3.5 h-3.5" />
                 <span>Direct Inquiries</span>

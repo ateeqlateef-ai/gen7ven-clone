@@ -17,7 +17,8 @@ const Footer: React.FC = () => {
               aria-label="Novexa Solutions"
             >
               <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 group-hover:border-blue-300 flex items-center justify-center transition-colors shadow-2xs">
-                <svg viewBox="0 0 40 40" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 40 40" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Novexa Solutions Logomark">
+                  <title>Novexa Solutions Logomark</title>
                   <path d="M10 30V10L22 25V10H28V30L16 15V30H10Z" fill="url(#footerBrandGradLight)" />
                   <circle cx="32" cy="11" r="2.5" fill="#0ea5e9" />
                   <defs>
@@ -107,9 +108,9 @@ const Footer: React.FC = () => {
                   Official Contact
                 </div>
                 
-                <h4 className="text-slate-900 font-bold text-sm font-display">
+                <h3 className="text-slate-900 font-bold text-sm font-display">
                   Start a Project Discussion
-                </h4>
+                </h3>
                 
                 <p className="text-slate-500 text-xs leading-relaxed">
                   Have a new digital project or enterprise software requirement? Contact our team directly.
