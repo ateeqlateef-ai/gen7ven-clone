@@ -8,6 +8,7 @@ import ProcessSection from './components/ProcessSection';
 import ProjectShowcaseSection from './components/ProjectShowcaseSection';
 import TechCapabilitiesSection from './components/TechCapabilitiesSection';
 import CTASection from './components/CTASection';
+import ClientTrustSection from './components/ClientTrustSection';
 import ContactForm from './components/ContactForm';
 import { SITE_INFO } from './data/siteData';
 import { PageType } from './types';
@@ -149,6 +150,7 @@ const App: React.FC = () => {
             <WhyChooseUs />
             <ProcessSection />
             <ProjectShowcaseSection />
+            <ClientTrustSection />
             <TechCapabilitiesSection />
             <CTASection />
           </div>
@@ -178,6 +180,7 @@ const App: React.FC = () => {
 
             <ServicesSection isFullPage={true} />
             <ProcessSection />
+            <ClientTrustSection />
             <TechCapabilitiesSection />
             <CTASection />
           </div>
@@ -261,6 +264,7 @@ const App: React.FC = () => {
 
             <WhyChooseUs />
             <ProjectShowcaseSection />
+            <ClientTrustSection />
             <TechCapabilitiesSection />
             <CTASection />
           </div>
