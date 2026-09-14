@@ -37,20 +37,86 @@ const ContactForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
+  const [selectedPackage, setSelectedPackage] = useState<{
+    id: string;
+    name: string;
+    price: string;
+    scope: string;
+  } | null>(null);
 
-  // Pre-fill service from URL parameters (e.g., /contact?service=Web Development) or fallback
+  // Pre-fill service & package from URL parameters (e.g., /contact?package=business) or fallback
   useEffect(() => {
     try {
       const hash = window.location.hash || '';
       const search = window.location.search || '';
       let serviceParam: string | null = null;
+      let packageParam: string | null = null;
 
       if (hash.includes('?')) {
         const queryParams = new URLSearchParams(hash.split('?')[1]);
         serviceParam = queryParams.get('service');
+        packageParam = queryParams.get('package');
       } else if (search) {
         const queryParams = new URLSearchParams(search);
         serviceParam = queryParams.get('service');
+        packageParam = queryParams.get('package');
+      }
+
+      if (packageParam) {
+        const pKey = packageParam.toLowerCase();
+        if (pKey === 'launch') {
+          setSelectedPackage({
+            id: 'launch',
+            name: 'Launch Package',
+            price: '$299 (25% OFF)',
+            scope: 'Up to 5 Pages'
+          });
+          setFormData(prev => ({
+            ...prev,
+            service: prev.service || 'Web Development',
+            budget: prev.budget || 'Less than £5,000',
+            message: prev.message || 'I am interested in getting started with the Launch Package ($299, Up to 5 pages).'
+          }));
+        } else if (pKey === 'business') {
+          setSelectedPackage({
+            id: 'business',
+            name: 'Business Package',
+            price: '$599 (Most Popular)',
+            scope: 'Up to 10 Pages'
+          });
+          setFormData(prev => ({
+            ...prev,
+            service: prev.service || 'Web Development',
+            budget: prev.budget || 'Less than £5,000',
+            message: prev.message || 'I would like to inquire about the Business Package ($599, Most Popular, Up to 10 pages).'
+          }));
+        } else if (pKey === 'professional') {
+          setSelectedPackage({
+            id: 'professional',
+            name: 'Professional Package',
+            price: '$999 (23% OFF)',
+            scope: 'Up to 15 Pages'
+          });
+          setFormData(prev => ({
+            ...prev,
+            service: prev.service || 'Web Development',
+            budget: prev.budget || 'Less than £5,000',
+            message: prev.message || 'I would like to inquire about the Professional Package ($999, Up to 15 pages).'
+          }));
+        } else if (pKey === 'custom') {
+          setSelectedPackage({
+            id: 'custom',
+            name: 'Custom Package',
+            price: 'Custom Quote',
+            scope: 'Bespoke & Enterprise Scope'
+          });
+          setFormData(prev => ({
+            ...prev,
+            service: prev.service || 'Full-Stack Architecture (Multiple Services)',
+            budget: prev.budget || 'Flexible / To be discussed',
+            message: prev.message || 'I would like to request a custom quote for our enterprise project requirements.'
+          }));
+        }
       }
 
       if (serviceParam) {
@@ -322,6 +388,33 @@ const ContactForm: React.FC = () => {
                   Fields marked with <span className="text-blue-600 font-bold">*</span> are required for scoping.
                 </p>
               </div>
+
+              {selectedPackage && (
+                <div 
+                  id="selected-package-badge" 
+                  className="mb-6 p-4 rounded-xl bg-sky-50 border border-sky-200 text-slate-800 text-xs flex items-center justify-between gap-3 animate-fade-in"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0" aria-hidden="true" />
+                    <div>
+                      <span className="text-slate-500 font-semibold uppercase tracking-wider text-[10px] block">
+                        Selected Package
+                      </span>
+                      <span className="font-bold text-slate-900 text-sm">{selectedPackage.name}</span>
+                      <span className="text-blue-700 font-bold ml-2">({selectedPackage.price})</span>
+                      <span className="text-slate-500 text-xs ml-2 hidden sm:inline">• {selectedPackage.scope}</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPackage(null)}
+                    className="text-slate-400 hover:text-slate-700 text-xs font-semibold px-2 py-1 rounded bg-white border border-slate-200 transition-colors shrink-0"
+                    title="Clear selected package"
+                  >
+                    Change
+                  </button>
+                </div>
+              )}
 
               {submitStatus === 'error' && (
                 <div 
