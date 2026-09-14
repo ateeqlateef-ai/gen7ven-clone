@@ -189,6 +189,36 @@ const App: React.FC = () => {
           </div>
         )}
 
+        {currentPage === 'PRICING' && (
+          <div className="animate-fade-in pt-8">
+            <header className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center py-12 md:py-16">
+              {/* Semantic Breadcrumb Navigation */}
+              <nav aria-label="Breadcrumb" className="mb-5 flex items-center justify-center gap-2 text-xs font-medium text-slate-500">
+                <a href="/" className="hover:text-blue-600 transition-colors">Home</a>
+                <span className="text-slate-300" aria-hidden="true">/</span>
+                <span className="text-slate-900 font-semibold" aria-current="page">Pricing</span>
+              </nav>
+
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Transparent Packages & Investment</span>
+              </span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight font-display">
+                Simple Packages. Powerful Digital Solutions.
+              </h1>
+              <p className="mt-5 text-slate-600 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto font-normal">
+                Choose the package that fits your current goals, or let us create a custom solution around your requirements. Transparent deliverables, fixed milestone scopes, and scalable technology.
+              </p>
+            </header>
+
+            <PricingSection isFullPage={true} />
+            <ClientTrustSection />
+            <ProcessSection />
+            <WhyChooseUs />
+            <CTASection />
+          </div>
+        )}
+
         {currentPage === 'ABOUT' && (
           <div className="animate-fade-in pt-8">
             <header className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center py-12 md:py-16">

@@ -91,6 +91,9 @@ const Footer: React.FC = () => {
                 <a href="/services" className="text-slate-600 hover:text-blue-600 transition-colors">Services</a>
               </li>
               <li>
+                <a href="/pricing" className="text-slate-600 hover:text-blue-600 transition-colors">Pricing</a>
+              </li>
+              <li>
                 <a href="/about" className="text-slate-600 hover:text-blue-600 transition-colors">About Us</a>
               </li>
               <li>
@@ -149,6 +152,7 @@ const Footer: React.FC = () => {
           
           <div className="flex items-center space-x-6 text-xs text-slate-500">
             <a href="/services" className="hover:text-blue-600 transition-colors">Services</a>
+            <a href="/pricing" className="hover:text-blue-600 transition-colors">Pricing</a>
             <a href="/about" className="hover:text-blue-600 transition-colors">About</a>
             <a href={`mailto:${SITE_INFO.email}`} className="hover:text-blue-600 transition-colors">Inquiries</a>
             <span className="text-slate-300">|</span>

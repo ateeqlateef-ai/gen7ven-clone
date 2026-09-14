@@ -1,4 +1,4 @@
-export type PageType = 'HOME' | 'SERVICES' | 'ABOUT' | 'CONTACT';
+export type PageType = 'HOME' | 'SERVICES' | 'PRICING' | 'ABOUT' | 'CONTACT';
 
 export interface ServiceItem {
   id: string;

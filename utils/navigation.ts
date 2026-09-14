@@ -8,6 +8,9 @@ export function getPageFromPath(pathname: string): PageType {
   if (normalized.startsWith('/services')) {
     return 'SERVICES';
   }
+  if (normalized.startsWith('/pricing')) {
+    return 'PRICING';
+  }
   if (normalized.startsWith('/about')) {
     return 'ABOUT';
   }

@@ -18,6 +18,10 @@ export interface PricingPackage {
   isPopular?: boolean;
 }
 
+interface PricingSectionProps {
+  isFullPage?: boolean;
+}
+
 export const PRICING_PACKAGES: PricingPackage[] = [
   {
     id: 'launch',
@@ -119,7 +123,7 @@ export const PRICING_PACKAGES: PricingPackage[] = [
   }
 ];
 
-const PricingSection: React.FC = () => {
+const PricingSection: React.FC<PricingSectionProps> = ({ isFullPage = false }) => {
   const handlePackageSelect = (packageParam: string, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
       e.preventDefault();
@@ -137,27 +141,40 @@ const PricingSection: React.FC = () => {
   return (
     <section
       id="pricing-packages-section"
-      className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]/50 border-y border-slate-100 relative overflow-hidden"
+      className={`px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]/50 border-y border-slate-100 relative overflow-hidden ${
+        isFullPage ? 'py-12 md:py-16' : 'py-20 md:py-28'
+      }`}
       aria-labelledby="pricing-heading"
     >
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
-        <header className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-blue-600" aria-hidden="true" />
-            <span>Transparent Pricing & Packages</span>
-          </span>
-          <h2
-            id="pricing-heading"
-            className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight font-display"
-          >
-            Simple Packages. Powerful Digital Solutions.
-          </h2>
-          <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed font-normal">
-            Choose the package that fits your current goals, or let us create a custom solution around your requirements.
-          </p>
-        </header>
+        {!isFullPage ? (
+          <header className="text-center max-w-3xl mx-auto mb-16">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600" aria-hidden="true" />
+              <span>Transparent Pricing & Packages</span>
+            </span>
+            <h2
+              id="pricing-heading"
+              className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight font-display"
+            >
+              Simple Packages. Powerful Digital Solutions.
+            </h2>
+            <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed font-normal">
+              Choose the package that fits your current goals, or let us create a custom solution around your requirements.
+            </p>
+          </header>
+        ) : (
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 id="pricing-heading" className="text-xl sm:text-2xl font-bold text-slate-900 font-display">
+              Select Your Preferred Digital Package
+            </h2>
+            <p className="text-sm text-slate-500 mt-2">
+              All plans include modern engineering standards, responsive design, and dedicated milestone delivery.
+            </p>
+          </div>
+        )}
 
         {/* 4 Pricing Cards Grid: 1 col on mobile, 2 on tablet, 4 on desktop */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-6 sm:gap-8 items-stretch">
