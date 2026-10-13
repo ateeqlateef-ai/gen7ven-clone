@@ -326,6 +326,10 @@ const App: React.FC = () => {
             </header>
 
             <ContactForm />
+
+            <div className="mt-16 pt-12 border-t border-slate-200">
+              <PricingSection isFullPage={true} />
+            </div>
           </div>
         )}
         </main>

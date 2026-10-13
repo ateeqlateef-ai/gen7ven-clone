@@ -44,92 +44,115 @@ const ContactForm: React.FC = () => {
     scope: string;
   } | null>(null);
 
+  const handleSelectPackage = (key: string) => {
+    const pKey = key.toLowerCase();
+    if (pKey === 'audit' || pKey === 'website-app-audit') {
+      setSelectedPackage({
+        id: 'audit',
+        name: 'Website/App Audit',
+        price: '$499',
+        scope: 'Performance, SEO & UX Audit'
+      });
+      setFormData(prev => ({
+        ...prev,
+        service: prev.service || 'Web Development',
+        budget: prev.budget || 'Less than £5,000',
+        message: prev.message || 'I am interested in booking a Website/App Audit ($499, Performance, SEO & UX). Fee adjustable against a full project.'
+      }));
+    } else if (pKey === 'launch') {
+      setSelectedPackage({
+        id: 'launch',
+        name: 'Launch Package',
+        price: '$799',
+        scope: 'Up to 5 Pages'
+      });
+      setFormData(prev => ({
+        ...prev,
+        service: prev.service || 'Web Development',
+        budget: prev.budget || 'Less than £5,000',
+        message: prev.message || 'I am interested in getting started with the Launch Package ($799, Up to 5 pages).'
+      }));
+    } else if (pKey === 'business') {
+      setSelectedPackage({
+        id: 'business',
+        name: 'Business Package',
+        price: '$1,799 (Most Popular)',
+        scope: 'Up to 10 Pages'
+      });
+      setFormData(prev => ({
+        ...prev,
+        service: prev.service || 'Web Development',
+        budget: prev.budget || 'Less than £5,000',
+        message: prev.message || 'I would like to inquire about the Business Package ($1,799, Most Popular, Up to 10 pages).'
+      }));
+    } else if (pKey === 'professional') {
+      setSelectedPackage({
+        id: 'professional',
+        name: 'Professional Package',
+        price: '$3,499',
+        scope: 'Up to 15 Pages'
+      });
+      setFormData(prev => ({
+        ...prev,
+        service: prev.service || 'Web Development',
+        budget: prev.budget || 'Less than £5,000',
+        message: prev.message || 'I would like to inquire about the Professional Package ($3,499, Up to 15 pages).'
+      }));
+    } else if (pKey === 'custom') {
+      setSelectedPackage({
+        id: 'custom',
+        name: 'Custom Package',
+        price: 'Custom Quote',
+        scope: 'Bespoke & Enterprise Scope'
+      });
+      setFormData(prev => ({
+        ...prev,
+        service: prev.service || 'Full-Stack Architecture (Multiple Services)',
+        budget: prev.budget || 'Flexible / To be discussed',
+        message: prev.message || 'I would like to request a custom quote for our enterprise project requirements.'
+      }));
+    }
+  };
+
   // Pre-fill service & package from URL parameters (e.g., /contact?package=business) or fallback
   useEffect(() => {
-    try {
-      const hash = window.location.hash || '';
-      const search = window.location.search || '';
-      let serviceParam: string | null = null;
-      let packageParam: string | null = null;
+    const parseUrlParams = () => {
+      try {
+        const hash = window.location.hash || '';
+        const search = window.location.search || '';
+        let serviceParam: string | null = null;
+        let packageParam: string | null = null;
 
-      if (hash.includes('?')) {
-        const queryParams = new URLSearchParams(hash.split('?')[1]);
-        serviceParam = queryParams.get('service');
-        packageParam = queryParams.get('package');
-      } else if (search) {
-        const queryParams = new URLSearchParams(search);
-        serviceParam = queryParams.get('service');
-        packageParam = queryParams.get('package');
-      }
-
-      if (packageParam) {
-        const pKey = packageParam.toLowerCase();
-        if (pKey === 'launch') {
-          setSelectedPackage({
-            id: 'launch',
-            name: 'Launch Package',
-            price: '$299 (25% OFF)',
-            scope: 'Up to 5 Pages'
-          });
-          setFormData(prev => ({
-            ...prev,
-            service: prev.service || 'Web Development',
-            budget: prev.budget || 'Less than £5,000',
-            message: prev.message || 'I am interested in getting started with the Launch Package ($299, Up to 5 pages).'
-          }));
-        } else if (pKey === 'business') {
-          setSelectedPackage({
-            id: 'business',
-            name: 'Business Package',
-            price: '$599 (Most Popular)',
-            scope: 'Up to 10 Pages'
-          });
-          setFormData(prev => ({
-            ...prev,
-            service: prev.service || 'Web Development',
-            budget: prev.budget || 'Less than £5,000',
-            message: prev.message || 'I would like to inquire about the Business Package ($599, Most Popular, Up to 10 pages).'
-          }));
-        } else if (pKey === 'professional') {
-          setSelectedPackage({
-            id: 'professional',
-            name: 'Professional Package',
-            price: '$999 (23% OFF)',
-            scope: 'Up to 15 Pages'
-          });
-          setFormData(prev => ({
-            ...prev,
-            service: prev.service || 'Web Development',
-            budget: prev.budget || 'Less than £5,000',
-            message: prev.message || 'I would like to inquire about the Professional Package ($999, Up to 15 pages).'
-          }));
-        } else if (pKey === 'custom') {
-          setSelectedPackage({
-            id: 'custom',
-            name: 'Custom Package',
-            price: 'Custom Quote',
-            scope: 'Bespoke & Enterprise Scope'
-          });
-          setFormData(prev => ({
-            ...prev,
-            service: prev.service || 'Full-Stack Architecture (Multiple Services)',
-            budget: prev.budget || 'Flexible / To be discussed',
-            message: prev.message || 'I would like to request a custom quote for our enterprise project requirements.'
-          }));
+        if (hash.includes('?')) {
+          const queryParams = new URLSearchParams(hash.split('?')[1]);
+          serviceParam = queryParams.get('service');
+          packageParam = queryParams.get('package');
+        } else if (search) {
+          const queryParams = new URLSearchParams(search);
+          serviceParam = queryParams.get('service');
+          packageParam = queryParams.get('package');
         }
-      }
 
-      if (serviceParam) {
-        const matched = SERVICE_OPTIONS.find(
-          s => s.toLowerCase() === serviceParam!.toLowerCase() || s.toLowerCase().includes(serviceParam!.toLowerCase())
-        );
-        if (matched) {
-          setFormData(prev => ({ ...prev, service: matched }));
+        if (packageParam) {
+          handleSelectPackage(packageParam);
         }
+
+        if (serviceParam) {
+          const matched = SERVICE_OPTIONS.find(
+            s => s.toLowerCase() === serviceParam!.toLowerCase() || s.toLowerCase().includes(serviceParam!.toLowerCase())
+          );
+          if (matched) {
+            setFormData(prev => ({ ...prev, service: matched }));
+          }
+        }
+      } catch {
+        // Ignore URL parsing errors
       }
-    } catch {
-      // Ignore URL parsing errors
-    }
+    };
+
+    parseUrlParams();
+    window.addEventListener('popstate', parseUrlParams);
+    return () => window.removeEventListener('popstate', parseUrlParams);
   }, []);
 
   const validate = (): boolean => {
@@ -389,7 +412,7 @@ const ContactForm: React.FC = () => {
                 </p>
               </div>
 
-              {selectedPackage && (
+              {selectedPackage ? (
                 <div 
                   id="selected-package-badge" 
                   className="mb-6 p-4 rounded-xl bg-sky-50 border border-sky-200 text-slate-800 text-xs flex items-center justify-between gap-3 animate-fade-in"
@@ -408,11 +431,48 @@ const ContactForm: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setSelectedPackage(null)}
-                    className="text-slate-400 hover:text-slate-700 text-xs font-semibold px-2 py-1 rounded bg-white border border-slate-200 transition-colors shrink-0"
+                    className="text-slate-400 hover:text-slate-700 text-xs font-semibold px-2 py-1 rounded bg-white border border-slate-200 transition-colors shrink-0 cursor-pointer"
                     title="Clear selected package"
                   >
                     Change
                   </button>
+                </div>
+              ) : (
+                <div className="mb-6 p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 text-xs">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-bold text-slate-700 uppercase tracking-wider text-[10px]">
+                      Select Package (Optional):
+                    </span>
+                    <a href="/pricing" className="text-blue-600 hover:underline font-semibold text-[11px]">
+                      Compare Packages →
+                    </a>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+                    {[
+                      { id: 'audit', name: 'Audit', price: '$499', badge: 'New' },
+                      { id: 'launch', name: 'Launch', price: '$799' },
+                      { id: 'business', name: 'Business', price: '$1,799', badge: 'Popular' },
+                      { id: 'professional', name: 'Professional', price: '$3,499' },
+                      { id: 'custom', name: 'Custom', price: 'Quote' }
+                    ].map(pkg => (
+                      <button
+                        key={pkg.id}
+                        type="button"
+                        onClick={() => handleSelectPackage(pkg.id)}
+                        className="p-2 bg-white hover:bg-sky-50 border border-slate-200 hover:border-blue-400 rounded-lg text-slate-800 text-left transition-all cursor-pointer shadow-2xs"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-[11px] text-slate-900">{pkg.name}</span>
+                          {pkg.badge && (
+                            <span className={`text-[9px] font-bold px-1 py-0.2 rounded ${pkg.badge === 'Popular' ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                              {pkg.badge}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[11px] font-bold text-blue-700 block mt-0.5">{pkg.price}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 

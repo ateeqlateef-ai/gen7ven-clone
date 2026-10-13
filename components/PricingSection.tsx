@@ -10,6 +10,7 @@ export interface PricingPackage {
   originalPrice?: string;
   discountBadge?: string;
   discountedPrice: string;
+  billingPeriod?: string;
   savings?: string;
   description?: string;
   features: string[];
@@ -27,10 +28,8 @@ export const PRICING_PACKAGES: PricingPackage[] = [
     id: 'launch',
     name: 'LAUNCH',
     bestFor: 'Small businesses & new brands',
-    originalPrice: '$399',
-    discountBadge: '25% OFF',
-    discountedPrice: '$299',
-    savings: 'Save $100',
+    discountedPrice: '$799',
+    billingPeriod: '/ project',
     features: [
       'Professional responsive website',
       'Up to 5 pages',
@@ -52,10 +51,8 @@ export const PRICING_PACKAGES: PricingPackage[] = [
     name: 'BUSINESS',
     badge: 'MOST POPULAR',
     bestFor: 'Growing & established businesses',
-    originalPrice: '$799',
-    discountBadge: '25% OFF',
-    discountedPrice: '$599',
-    savings: 'Save $200',
+    discountedPrice: '$1,799',
+    billingPeriod: '/ project',
     features: [
       'Everything in Launch',
       'Up to 10 pages',
@@ -76,10 +73,8 @@ export const PRICING_PACKAGES: PricingPackage[] = [
     id: 'professional',
     name: 'PROFESSIONAL',
     bestFor: 'Businesses ready to scale',
-    originalPrice: '$1,299',
-    discountBadge: '23% OFF',
-    discountedPrice: '$999',
-    savings: 'Save $300',
+    discountedPrice: '$3,499',
+    billingPeriod: '/ project',
     features: [
       'Everything in Business',
       'Up to 15 pages',
@@ -95,6 +90,28 @@ export const PRICING_PACKAGES: PricingPackage[] = [
     ],
     ctaText: 'CHOOSE PROFESSIONAL',
     packageParam: 'professional',
+    isPopular: false
+  },
+  {
+    id: 'audit',
+    name: 'WEBSITE/APP AUDIT',
+    badge: 'NEW',
+    bestFor: 'Websites & mobile applications',
+    discountedPrice: '$499',
+    billingPeriod: '/ audit',
+    savings: 'Adjustable against full project',
+    description: 'Paid audit of a website or mobile app (performance, SEO, UX) with an actionable report; the audit fee is adjustable against a full project.',
+    features: [
+      'Core Web Vitals & speed audit',
+      'Technical SEO & indexing review',
+      'UI/UX & conversion rate analysis',
+      'Mobile responsiveness testing',
+      'Security & code architecture check',
+      'Actionable report with recommendations',
+      'Audit fee adjustable against full project'
+    ],
+    ctaText: 'BOOK AN AUDIT',
+    packageParam: 'audit',
     isPopular: false
   },
   {
@@ -176,8 +193,8 @@ const PricingSection: React.FC<PricingSectionProps> = ({ isFullPage = false }) =
           </div>
         )}
 
-        {/* 4 Pricing Cards Grid: 1 col on mobile, 2 on tablet, 4 on desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-6 sm:gap-8 items-stretch">
+        {/* 5 Pricing Cards Grid: 1 col mobile, 2 on tablet, 3 on laptop, 5 on desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 lg:gap-4 xl:gap-4 items-stretch">
           {PRICING_PACKAGES.map((pkg) => {
             const isCustom = pkg.id === 'custom';
             const isPopular = pkg.isPopular;
@@ -191,21 +208,29 @@ const PricingSection: React.FC<PricingSectionProps> = ({ isFullPage = false }) =
                     : 'border border-slate-200 hover:border-blue-300 shadow-2xs hover:shadow-md hover:shadow-blue-500/5 hover:-translate-y-1'
                 }`}
               >
-                {/* Popular Badge */}
-                {isPopular && (
+                {/* Badge (Popular or New) */}
+                {pkg.badge && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
-                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 text-white text-[11px] font-bold uppercase tracking-wider shadow-sm">
-                      <Zap className="w-3 h-3 fill-white" aria-hidden="true" />
+                    <span className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-white text-[11px] font-bold uppercase tracking-wider shadow-sm ${
+                      isPopular 
+                        ? 'bg-gradient-to-r from-blue-600 to-sky-600' 
+                        : 'bg-gradient-to-r from-emerald-600 to-teal-600'
+                    }`}>
+                      {isPopular ? (
+                        <Zap className="w-3 h-3 fill-white" aria-hidden="true" />
+                      ) : (
+                        <Sparkles className="w-3 h-3 text-white" aria-hidden="true" />
+                      )}
                       <span>{pkg.badge}</span>
                     </span>
                   </div>
                 )}
 
                 {/* Card Main Content */}
-                <div className="p-6 sm:p-7 flex-1 flex flex-col">
+                <div className="p-5 sm:p-6 flex-1 flex flex-col">
                   {/* Top Header: Label & Best For */}
                   <div className="mb-4">
-                    <h3 className="text-xl font-black text-slate-900 tracking-tight font-display">
+                    <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight font-display">
                       {pkg.name}
                     </h3>
                     <p className="text-xs sm:text-[13px] text-slate-500 mt-1 font-medium">
@@ -213,38 +238,46 @@ const PricingSection: React.FC<PricingSectionProps> = ({ isFullPage = false }) =
                     </p>
                   </div>
 
-                  {/* Pricing Block with Discount Visual Hierarchy */}
-                  <div className="py-4 border-y border-slate-100 mb-5 min-h-[110px] flex flex-col justify-center">
+                  {/* Pricing Block with Clean Hierarchy */}
+                  <div className="py-4 border-y border-slate-100 mb-5 min-h-[95px] flex flex-col justify-center">
                     {!isCustom ? (
                       <div>
-                        {/* Strikethrough Original Price & Discount Badge */}
-                        <div className="flex items-center gap-2.5 mb-1.5">
-                          <span className="text-slate-400 line-through text-sm sm:text-base font-semibold">
-                            {pkg.originalPrice}
-                          </span>
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-sky-100 text-blue-700 border border-sky-200">
-                            {pkg.discountBadge}
-                          </span>
-                        </div>
+                        {/* Strikethrough Original Price & Discount Badge (if any) */}
+                        {pkg.originalPrice && (
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className="text-slate-400 line-through text-sm font-semibold">
+                              {pkg.originalPrice}
+                            </span>
+                            {pkg.discountBadge && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-sky-100 text-blue-700 border border-sky-200">
+                                {pkg.discountBadge}
+                              </span>
+                            )}
+                          </div>
+                        )}
 
-                        {/* Prominent Discounted Price */}
+                        {/* Prominent Price */}
                         <div className="flex items-baseline gap-1">
-                          <span className="text-4xl sm:text-[42px] font-black text-slate-900 font-display tracking-tight leading-none">
+                          <span className="text-3xl sm:text-[36px] xl:text-[32px] 2xl:text-[36px] font-black text-slate-900 font-display tracking-tight leading-none">
                             {pkg.discountedPrice}
                           </span>
-                          <span className="text-xs text-slate-500 font-medium">/ project</span>
-                        </div>
-
-                        {/* Savings Badge Directly Below Discounted Price */}
-                        <div className="mt-2">
-                          <span className="inline-block text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/80">
-                            {pkg.savings}
+                          <span className="text-xs text-slate-500 font-medium">
+                            {pkg.billingPeriod || '/ project'}
                           </span>
                         </div>
+
+                        {/* Note / Savings Badge (if any) */}
+                        {pkg.savings && (
+                          <div className="mt-2">
+                            <span className="inline-block text-[10px] sm:text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/80">
+                              {pkg.savings}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div>
-                        <div className="text-2xl sm:text-[28px] font-black text-slate-900 font-display tracking-tight leading-tight">
+                        <div className="text-xl sm:text-2xl xl:text-xl 2xl:text-2xl font-black text-slate-900 font-display tracking-tight leading-tight">
                           {pkg.discountedPrice}
                         </div>
                         <p className="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -273,12 +306,12 @@ const PricingSection: React.FC<PricingSectionProps> = ({ isFullPage = false }) =
                 </div>
 
                 {/* Card Footer with CTA Button */}
-                <div className="p-6 sm:p-7 pt-0">
+                <div className="p-5 sm:p-6 pt-0">
                   <a
-                    href={`https://www.novexasolutions.uk/contact?package=${pkg.packageParam}`}
+                    href={`/contact?package=${pkg.packageParam}`}
                     onClick={(e) => handlePackageSelect(pkg.packageParam, e)}
                     id={`pricing-cta-${pkg.id}`}
-                    className={`w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 ${
+                    className={`w-full inline-flex items-center justify-center gap-1.5 py-3 px-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
                       isPopular
                         ? 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-sm hover:shadow-md hover:shadow-blue-600/25 active:scale-[0.98]'
                         : 'bg-slate-900 hover:bg-blue-600 text-white shadow-2xs hover:shadow-sm active:scale-[0.98]'

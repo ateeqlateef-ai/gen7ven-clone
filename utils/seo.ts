@@ -37,10 +37,10 @@ export const PAGE_SEO: Record<PageType, PageSEOMetadata> = {
   },
   PRICING: {
     title: 'Packages & Pricing | Web Development & Digital Solutions | Novexa Solutions',
-    description: 'Explore transparent pricing packages for web development, UI/UX, mobile apps, and enterprise digital solutions from Novexa Solutions UK. Starting from $299.',
+    description: 'Explore transparent pricing packages for web development, UI/UX, mobile apps, and enterprise digital solutions from Novexa Solutions UK. Starting from $499.',
     canonical: 'https://www.novexasolutions.uk/pricing',
     ogTitle: 'Packages & Pricing | Web Development & Digital Solutions | Novexa Solutions',
-    ogDescription: 'Explore transparent pricing packages for web development, UI/UX, mobile apps, and enterprise digital solutions from Novexa Solutions UK. Starting from $299.',
+    ogDescription: 'Explore transparent pricing packages for web development, UI/UX, mobile apps, and enterprise digital solutions from Novexa Solutions UK. Starting from $499.',
     ogUrl: 'https://www.novexasolutions.uk/pricing',
     breadcrumbs: [
       { name: 'Home', url: 'https://www.novexasolutions.uk/' },
