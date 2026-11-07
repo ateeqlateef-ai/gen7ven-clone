@@ -1,307 +1,361 @@
 import React from 'react';
-import { ArrowRight, Check, Sparkles, HelpCircle } from 'lucide-react';
+import { Check, Sparkles, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { navigate } from '../utils/navigation';
 
-const PricingSection: React.FC = () => {
+export interface PricingPackage {
+  id: string;
+  name: string;
+  badge?: string;
+  bestFor: string;
+  originalPrice?: string;
+  discountBadge?: string;
+  discountedPrice: string;
+  billingPeriod?: string;
+  savings?: string;
+  description?: string;
+  features: string[];
+  ctaText: string;
+  packageParam: string;
+  isPopular?: boolean;
+}
+
+interface PricingSectionProps {
+  isFullPage?: boolean;
+}
+
+export const PRICING_PACKAGES: PricingPackage[] = [
+  {
+    id: 'launch',
+    name: 'LAUNCH',
+    bestFor: 'Small businesses & new brands',
+    discountedPrice: '$799',
+    billingPeriod: '/ project',
+    features: [
+      'Professional responsive website',
+      'Up to 5 pages',
+      'Custom modern UI',
+      'Contact form',
+      'WhatsApp integration',
+      'Basic on-page SEO',
+      'Mobile & tablet optimization',
+      'Social media integration',
+      'Basic performance optimization',
+      '1 revision round'
+    ],
+    ctaText: 'GET STARTED',
+    packageParam: 'launch',
+    isPopular: false
+  },
+  {
+    id: 'business',
+    name: 'BUSINESS',
+    badge: 'MOST POPULAR',
+    bestFor: 'Growing & established businesses',
+    discountedPrice: '$1,799',
+    billingPeriod: '/ project',
+    features: [
+      'Everything in Launch',
+      'Up to 10 pages',
+      'Custom UI/UX design',
+      'Advanced contact & lead forms',
+      'Blog / news section',
+      'Technical SEO foundation',
+      'Google Analytics & Search Console setup',
+      'Speed & Core Web Vitals optimization',
+      '2–3 revision rounds',
+      'Post-launch support'
+    ],
+    ctaText: 'CHOOSE BUSINESS',
+    packageParam: 'business',
+    isPopular: true
+  },
+  {
+    id: 'professional',
+    name: 'PROFESSIONAL',
+    bestFor: 'Businesses ready to scale',
+    discountedPrice: '$3,499',
+    billingPeriod: '/ project',
+    features: [
+      'Everything in Business',
+      'Up to 15 pages',
+      'Advanced UI/UX',
+      'CMS integration',
+      'Booking / appointment functionality',
+      'Payment gateway integration',
+      'Advanced SEO setup',
+      'Custom API / integration support',
+      'Advanced performance optimization',
+      'Priority support',
+      '3 revision rounds'
+    ],
+    ctaText: 'CHOOSE PROFESSIONAL',
+    packageParam: 'professional',
+    isPopular: false
+  },
+  {
+    id: 'audit',
+    name: 'WEBSITE/APP AUDIT',
+    badge: 'NEW',
+    bestFor: 'Websites & mobile applications',
+    discountedPrice: '$499',
+    billingPeriod: '/ audit',
+    savings: 'Adjustable against full project',
+    description: 'Paid audit of a website or mobile app (performance, SEO, UX) with an actionable report; the audit fee is adjustable against a full project.',
+    features: [
+      'Core Web Vitals & speed audit',
+      'Technical SEO & indexing review',
+      'UI/UX & conversion rate analysis',
+      'Mobile responsiveness testing',
+      'Security & code architecture check',
+      'Actionable report with recommendations',
+      'Audit fee adjustable against full project'
+    ],
+    ctaText: 'BOOK AN AUDIT',
+    packageParam: 'audit',
+    isPopular: false
+  },
+  {
+    id: 'custom',
+    name: 'CUSTOM',
+    bestFor: 'Advanced & enterprise requirements',
+    discountedPrice: 'CUSTOM QUOTE',
+    description: 'Build exactly what your business needs with a solution tailored to your goals, technology requirements, and project scope.',
+    features: [
+      'Custom web applications',
+      'E-commerce platforms',
+      'Mobile applications',
+      'AI integrations',
+      'Custom dashboards',
+      'API integrations',
+      'Advanced automation',
+      'Enterprise SEO',
+      'Bespoke UI/UX',
+      'Custom development requirements',
+      'Dedicated project planning',
+      'Scalable architecture'
+    ],
+    ctaText: 'REQUEST A CUSTOM QUOTE',
+    packageParam: 'custom',
+    isPopular: false
+  }
+];
+
+const PricingSection: React.FC<PricingSectionProps> = ({ isFullPage = false }) => {
+  const handlePackageSelect = (packageParam: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+      e.preventDefault();
+      navigate(`/contact?package=${encodeURIComponent(packageParam)}`);
+    }
+  };
+
+  const handleGeneralConsultation = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+      e.preventDefault();
+      navigate('/contact');
+    }
+  };
+
   return (
-    <div className="text-left space-y-0">
-      {/* Intro Header */}
-      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto text-center space-y-4">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-[#0F766E] text-xs font-bold uppercase tracking-widest">
-            Transparent Pricing
-          </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight font-display">
-            Pricing & Packages
-          </h1>
-          <p className="text-slate-700 text-base sm:text-lg leading-relaxed max-w-3xl mx-auto font-normal">
-            "Website packages have fixed starting prices below. Mobile apps are quoted individually — no two apps cost the same, so a fixed price would be dishonest. The audit is the low-risk way to start."
-          </p>
-          <div className="inline-block p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 font-semibold">
-            All prices in USD. Starting prices — the final quote depends on the agreed scope.
-          </div>
-        </div>
-      </section>
-
-      {/* Website Packages Grid (LAUNCH, BUSINESS, PROFESSIONAL) */}
-      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-[#F8FAFC] border-b border-slate-200">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-display">
-              Website Packages
+    <section
+      id="pricing-packages-section"
+      className={`px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]/50 border-y border-slate-100 relative overflow-hidden ${
+        isFullPage ? 'py-12 md:py-16' : 'py-20 md:py-28'
+      }`}
+      aria-labelledby="pricing-heading"
+    >
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Section Header */}
+        {!isFullPage ? (
+          <header className="text-center max-w-3xl mx-auto mb-16">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-4">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600" aria-hidden="true" />
+              <span>Transparent Pricing & Packages</span>
+            </span>
+            <h2
+              id="pricing-heading"
+              className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight font-display"
+            >
+              Simple Packages. Powerful Digital Solutions.
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-1">
-              "All prices in USD. Starting prices — the final quote depends on the agreed scope."
+            <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed font-normal">
+              Choose the package that fits your current goals, or let us create a custom solution around your requirements.
+            </p>
+          </header>
+        ) : (
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 id="pricing-heading" className="text-xl sm:text-2xl font-bold text-slate-900 font-display">
+              Select Your Preferred Digital Package
+            </h2>
+            <p className="text-sm text-slate-500 mt-2">
+              All plans include modern engineering standards, responsive design, and dedicated milestone delivery.
             </p>
           </div>
+        )}
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-            {/* LAUNCH — $799/project */}
-            <article className="p-7 rounded-2xl bg-white border border-slate-200 flex flex-col justify-between shadow-sm">
-              <div>
-                <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider block mb-1">
-                  Starter Tier
-                </span>
-                <h3 className="text-xl font-black text-slate-900 font-display mb-3">
-                  LAUNCH
-                </h3>
-                <div className="flex items-baseline gap-1 py-3 border-y border-slate-100 mb-5">
-                  <span className="text-3xl sm:text-4xl font-black text-slate-900 font-display">
-                    $799
-                  </span>
-                  <span className="text-xs text-slate-500 font-medium">/ project</span>
+        {/* 5 Pricing Cards Grid: 1 col mobile, 2 on tablet, 3 on laptop, 5 on desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 lg:gap-4 xl:gap-4 items-stretch">
+          {PRICING_PACKAGES.map((pkg) => {
+            const isCustom = pkg.id === 'custom';
+            const isPopular = pkg.isPopular;
+
+            return (
+              <article
+                key={pkg.id}
+                className={`rounded-2xl flex flex-col justify-between transition-all duration-300 relative bg-white ${
+                  isPopular
+                    ? 'border-2 border-blue-600 shadow-lg shadow-blue-600/10 ring-1 ring-blue-600/20 xl:-translate-y-2'
+                    : 'border border-slate-200 hover:border-blue-300 shadow-2xs hover:shadow-md hover:shadow-blue-500/5 hover:-translate-y-1'
+                }`}
+              >
+                {/* Badge (Popular or New) */}
+                {pkg.badge && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
+                    <span className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-white text-[11px] font-bold uppercase tracking-wider shadow-sm ${
+                      isPopular 
+                        ? 'bg-gradient-to-r from-blue-600 to-sky-600' 
+                        : 'bg-gradient-to-r from-emerald-600 to-teal-600'
+                    }`}>
+                      {isPopular ? (
+                        <Zap className="w-3 h-3 fill-white" aria-hidden="true" />
+                      ) : (
+                        <Sparkles className="w-3 h-3 text-white" aria-hidden="true" />
+                      )}
+                      <span>{pkg.badge}</span>
+                    </span>
+                  </div>
+                )}
+
+                {/* Card Main Content */}
+                <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                  {/* Top Header: Label & Best For */}
+                  <div className="mb-4">
+                    <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight font-display">
+                      {pkg.name}
+                    </h3>
+                    <p className="text-xs sm:text-[13px] text-slate-500 mt-1 font-medium">
+                      {pkg.bestFor}
+                    </p>
+                  </div>
+
+                  {/* Pricing Block with Clean Hierarchy */}
+                  <div className="py-4 border-y border-slate-100 mb-5 min-h-[95px] flex flex-col justify-center">
+                    {!isCustom ? (
+                      <div>
+                        {/* Strikethrough Original Price & Discount Badge (if any) */}
+                        {pkg.originalPrice && (
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className="text-slate-400 line-through text-sm font-semibold">
+                              {pkg.originalPrice}
+                            </span>
+                            {pkg.discountBadge && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-sky-100 text-blue-700 border border-sky-200">
+                                {pkg.discountBadge}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Prominent Price */}
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-3xl sm:text-[36px] xl:text-[32px] 2xl:text-[36px] font-black text-slate-900 font-display tracking-tight leading-none">
+                            {pkg.discountedPrice}
+                          </span>
+                          <span className="text-xs text-slate-500 font-medium">
+                            {pkg.billingPeriod || '/ project'}
+                          </span>
+                        </div>
+
+                        {/* Note / Savings Badge (if any) */}
+                        {pkg.savings && (
+                          <div className="mt-2">
+                            <span className="inline-block text-[10px] sm:text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/80">
+                              {pkg.savings}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="text-xl sm:text-2xl xl:text-xl 2xl:text-2xl font-black text-slate-900 font-display tracking-tight leading-tight">
+                          {pkg.discountedPrice}
+                        </div>
+                        <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                          {pkg.description}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Package Features List */}
+                  <div className="flex-1">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3">
+                      Package Includes:
+                    </p>
+                    <ul className="space-y-2.5 text-xs sm:text-[13px] text-slate-600">
+                      {pkg.features.map((feature, fIdx) => (
+                        <li key={fIdx} className="flex items-start gap-2.5">
+                          <div className="mt-0.5 w-4 h-4 rounded-full bg-sky-50 text-blue-600 flex items-center justify-center shrink-0 border border-sky-100">
+                            <Check className="w-2.5 h-2.5 stroke-[2.5]" aria-hidden="true" />
+                          </div>
+                          <span className="leading-snug">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 mb-6">
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Up to 5 pages</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Contact form</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>WhatsApp integration</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Basic SEO</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>1 revision</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="pt-4 border-t border-slate-100">
-                <a
-                  href="/contact?package=launch"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 hover:bg-[#0A1A2F] text-white text-xs font-bold uppercase tracking-wider transition-colors"
-                >
-                  <span>Select Launch Package</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </article>
-
-            {/* BUSINESS — $1,799/project (most popular) */}
-            <article className="p-7 rounded-2xl bg-white border-2 border-[#14B8A6] flex flex-col justify-between shadow-lg relative md:-translate-y-2">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="px-3 py-0.5 rounded-full bg-[#14B8A6] text-[#0A1A2F] text-[10px] font-bold uppercase tracking-wider shadow-xs">
-                  Most Popular
-                </span>
-              </div>
-
-              <div>
-                <span className="text-xs font-mono font-bold text-[#0D9488] uppercase tracking-wider block mb-1">
-                  Growth Tier
-                </span>
-                <h3 className="text-xl font-black text-slate-900 font-display mb-3">
-                  BUSINESS
-                </h3>
-                <div className="flex items-baseline gap-1 py-3 border-y border-slate-100 mb-5">
-                  <span className="text-3xl sm:text-4xl font-black text-slate-900 font-display">
-                    $1,799
-                  </span>
-                  <span className="text-xs text-slate-500 font-medium">/ project</span>
+                {/* Card Footer with CTA Button */}
+                <div className="p-5 sm:p-6 pt-0">
+                  <a
+                    href={`/contact?package=${pkg.packageParam}`}
+                    onClick={(e) => handlePackageSelect(pkg.packageParam, e)}
+                    id={`pricing-cta-${pkg.id}`}
+                    className={`w-full inline-flex items-center justify-center gap-1.5 py-3 px-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
+                      isPopular
+                        ? 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-sm hover:shadow-md hover:shadow-blue-600/25 active:scale-[0.98]'
+                        : 'bg-slate-900 hover:bg-blue-600 text-white shadow-2xs hover:shadow-sm active:scale-[0.98]'
+                    }`}
+                  >
+                    <span>{pkg.ctaText}</span>
+                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                  </a>
                 </div>
-
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 mb-6">
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Up to 10 pages</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Blog</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Google Analytics and Search Console</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>2–3 revisions</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Post-launch support</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="pt-4 border-t border-slate-100">
-                <a
-                  href="/contact?package=business"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#14B8A6] hover:bg-[#0D9488] text-[#0A1A2F] text-xs font-bold uppercase tracking-wider transition-colors font-display"
-                >
-                  <span>Select Business Package</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </article>
-
-            {/* PROFESSIONAL — $3,499/project */}
-            <article className="p-7 rounded-2xl bg-white border border-slate-200 flex flex-col justify-between shadow-sm">
-              <div>
-                <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider block mb-1">
-                  Scale Tier
-                </span>
-                <h3 className="text-xl font-black text-slate-900 font-display mb-3">
-                  PROFESSIONAL
-                </h3>
-                <div className="flex items-baseline gap-1 py-3 border-y border-slate-100 mb-5">
-                  <span className="text-3xl sm:text-4xl font-black text-slate-900 font-display">
-                    $3,499
-                  </span>
-                  <span className="text-xs text-slate-500 font-medium">/ project</span>
-                </div>
-
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 mb-6">
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Up to 15 pages</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>CMS</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Booking</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Payment gateway</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>API support</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>Priority support</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Check className="w-4 h-4 text-[#0D9488] shrink-0 mt-0.5" />
-                    <span>3 revisions</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="pt-4 border-t border-slate-100">
-                <a
-                  href="/contact?package=professional"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 hover:bg-[#0A1A2F] text-white text-xs font-bold uppercase tracking-wider transition-colors"
-                >
-                  <span>Select Professional Package</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </article>
-          </div>
-
-          <div className="mt-8 p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 font-mono">
-            [PLACEHOLDER: confirm these three prices are still current, and what "post-launch support" covers and for how long.]
-          </div>
+              </article>
+            );
+          })}
         </div>
-      </section>
 
-      {/* Mobile Apps — Custom Quote (Section 6) */}
-      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-white border-b border-slate-200">
-        <div className="max-w-4xl mx-auto space-y-6">
-          <div className="text-center max-w-2xl mx-auto mb-6">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-widest mb-3">
-              Mobile App Development
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 font-display">
-              Mobile Apps — Custom Quote
-            </h2>
-          </div>
+        {/* Pricing Notes & Consultation Callout */}
+        <div className="mt-14 sm:mt-16 max-w-4xl mx-auto text-center space-y-6">
+          <p className="text-xs sm:text-sm text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            Starting prices shown above. Final pricing depends on project scope, functionality, integrations, content requirements, and customization.
+          </p>
 
-          <div className="p-7 sm:p-8 rounded-3xl bg-[#0A1A2F] text-white border border-slate-800 space-y-5">
-            <h3 className="text-xl font-bold text-white font-display">How quoting works:</h3>
-            <ol className="space-y-2.5 text-sm sm:text-base text-slate-200 list-decimal list-inside">
-              <li>A 15–30 minute call to agree what the app must do.</li>
-              <li>A written, fixed-scope proposal with a quote and a timeline.</li>
-              <li>A deposit to start, milestone payments as agreed, and final payment on delivery.</li>
-            </ol>
-
-            <div className="p-3.5 rounded-xl bg-slate-800 border border-amber-900/50 text-xs text-amber-300 font-mono">
-              [PLACEHOLDER: deposit/milestone structure to confirm.]
-            </div>
-
-            <div className="pt-2">
-              <h4 className="text-sm font-bold uppercase tracking-wider text-[#14B8A6] mb-2">
-                What affects the price:
+          <div className="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-6 text-left">
+            <div className="space-y-1">
+              <h4 className="text-base sm:text-lg font-bold text-slate-900 font-display">
+                Need something different?
               </h4>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                "What affects the price: number of screens, features (subscriptions, payments, chat, maps), integrations (payment gateway, existing backend, third-party services), and whether a backend or admin panel is needed. You get the quote before any work starts, and the scope is fixed in writing."
+              <p className="text-xs sm:text-sm text-slate-600">
+                We can create a custom solution tailored to your business, technology stack, and timeline.
               </p>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 flex justify-end">
-              <a
-                href="/contact?service=Mobile+App+Development"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#14B8A6] hover:bg-[#0D9488] text-[#0A1A2F] text-xs font-bold uppercase tracking-wider transition-all font-display"
-              >
-                <span>Request Mobile App Scoping</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
+            <a
+              href="https://www.novexasolutions.uk/contact"
+              onClick={handleGeneralConsultation}
+              id="pricing-discuss-project-btn"
+              className="shrink-0 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-sky-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-sky-200 hover:border-blue-600 font-bold text-xs sm:text-sm uppercase tracking-wider transition-all shadow-2xs hover:shadow-sm"
+            >
+              <span>DISCUSS YOUR PROJECT</span>
+              <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </a>
           </div>
         </div>
-      </section>
 
-      {/* App & Website Audit — $499 (Section 6) */}
-      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]">
-        <div className="max-w-4xl mx-auto">
-          <div className="p-8 sm:p-10 rounded-3xl bg-white border-2 border-slate-200 shadow-sm space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <span className="text-xs font-mono font-bold text-[#0D9488] uppercase tracking-wider block">
-                  Low-Risk Assessment
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-display">
-                  App & Website Audit
-                </h2>
-              </div>
-              <div className="text-right">
-                <span className="text-3xl sm:text-4xl font-black text-slate-900 font-display block">
-                  $499
-                </span>
-                <span className="text-xs font-bold text-[#0D9488]">
-                  Credited against a full project if you proceed
-                </span>
-              </div>
-            </div>
-
-            <p className="text-slate-700 text-base leading-relaxed">
-              "A short, written audit of your app or website — $499, credited against a full project if you proceed. I review the mobile experience (or subscription/checkout flow) and send back a one-page note: what is costing you users or orders, and what to fix first. You keep the note either way."
-            </p>
-
-            <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 font-mono">
-              [PLACEHOLDER: confirm the $499 price and what the one-page note covers.]
-            </div>
-
-            <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <span className="text-xs text-slate-500">
-                Actionable one-page teardown delivered directly by founder Ateeq Lateef.
-              </span>
-              <a
-                href="/contact?package=audit"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0A1A2F] hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider transition-colors"
-              >
-                <span>Book an Audit ($499)</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#14B8A6]" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 
