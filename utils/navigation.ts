@@ -1,7 +1,7 @@
 import { PageType } from '../types';
 
 /**
- * Maps a pathname (e.g. '/', '/about', '/services', '/contact') to the internal PageType.
+ * Maps a pathname (e.g. '/', '/services', '/pricing', '/portfolio', '/about', '/contact', '/privacy') to the internal PageType.
  */
 export function getPageFromPath(pathname: string): PageType {
   const normalized = (pathname || '').toLowerCase().replace(/\/+$/, '') || '/';
@@ -11,11 +11,17 @@ export function getPageFromPath(pathname: string): PageType {
   if (normalized.startsWith('/pricing')) {
     return 'PRICING';
   }
+  if (normalized.startsWith('/portfolio')) {
+    return 'PORTFOLIO';
+  }
   if (normalized.startsWith('/about')) {
     return 'ABOUT';
   }
   if (normalized.startsWith('/contact')) {
     return 'CONTACT';
+  }
+  if (normalized.startsWith('/privacy')) {
+    return 'PRIVACY';
   }
   return 'HOME';
 }

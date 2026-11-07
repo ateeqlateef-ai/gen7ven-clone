@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Send, CheckCircle2, AlertCircle, RefreshCw, Clock, Globe, ShieldCheck } from 'lucide-react';
+import { Mail, Send, CheckCircle2, AlertCircle, RefreshCw, Clock, Globe } from 'lucide-react';
 import CustomDropdown from './CustomDropdown';
 import { SITE_INFO } from '../data/siteData';
 import { ContactFormData } from '../types';
 
 const SERVICE_OPTIONS = [
-  'UI/UX Design',
+  'Flutter Mobile App Development',
   'Web Development',
-  'Mobile App Development',
-  'Brand Identity',
-  'SEO Marketing',
-  'AI Solutions',
-  'Full-Stack Architecture (Multiple Services)',
-  'General Consultation'
+  'API & Backend Integration',
+  'App Maintenance & Modernisation',
+  'White-label Agency Development',
+  'App & Website Audit ($499)'
 ];
 
 const BUDGET_OPTIONS = [
-  'Less than £5,000',
-  '£5,000 – £15,000',
-  '£15,000 – £30,000',
-  '£30,000+',
-  'Flexible / To be discussed'
+  'Under $1,000 (Small fix/audit)',
+  '$1,000 – $3,000',
+  '$3,000 – $7,000',
+  '$7,000 – $15,000',
+  '$15,000+',
+  'Custom / To be scoped'
 ];
 
 const ContactForm: React.FC = () => {
@@ -55,9 +54,9 @@ const ContactForm: React.FC = () => {
       });
       setFormData(prev => ({
         ...prev,
-        service: prev.service || 'Web Development',
-        budget: prev.budget || 'Less than £5,000',
-        message: prev.message || 'I am interested in booking a Website/App Audit ($499, Performance, SEO & UX). Fee adjustable against a full project.'
+        service: 'App & Website Audit ($499)',
+        budget: prev.budget || 'Under $1,000 (Small fix/audit)',
+        message: prev.message || 'I am interested in booking an App & Website Audit ($499). Fee credited against a full project if I proceed.'
       }));
     } else if (pKey === 'launch') {
       setSelectedPackage({
@@ -68,8 +67,8 @@ const ContactForm: React.FC = () => {
       });
       setFormData(prev => ({
         ...prev,
-        service: prev.service || 'Web Development',
-        budget: prev.budget || 'Less than £5,000',
+        service: 'Web Development',
+        budget: prev.budget || 'Under $1,000 (Small fix/audit)',
         message: prev.message || 'I am interested in getting started with the Launch Package ($799, Up to 5 pages).'
       }));
     } else if (pKey === 'business') {
@@ -81,8 +80,8 @@ const ContactForm: React.FC = () => {
       });
       setFormData(prev => ({
         ...prev,
-        service: prev.service || 'Web Development',
-        budget: prev.budget || 'Less than £5,000',
+        service: 'Web Development',
+        budget: prev.budget || '$1,000 – $3,000',
         message: prev.message || 'I would like to inquire about the Business Package ($1,799, Most Popular, Up to 10 pages).'
       }));
     } else if (pKey === 'professional') {
@@ -94,27 +93,13 @@ const ContactForm: React.FC = () => {
       });
       setFormData(prev => ({
         ...prev,
-        service: prev.service || 'Web Development',
-        budget: prev.budget || 'Less than £5,000',
+        service: 'Web Development',
+        budget: prev.budget || '$3,000 – $7,000',
         message: prev.message || 'I would like to inquire about the Professional Package ($3,499, Up to 15 pages).'
-      }));
-    } else if (pKey === 'custom') {
-      setSelectedPackage({
-        id: 'custom',
-        name: 'Custom Package',
-        price: 'Custom Quote',
-        scope: 'Bespoke & Enterprise Scope'
-      });
-      setFormData(prev => ({
-        ...prev,
-        service: prev.service || 'Full-Stack Architecture (Multiple Services)',
-        budget: prev.budget || 'Flexible / To be discussed',
-        message: prev.message || 'I would like to request a custom quote for our enterprise project requirements.'
       }));
     }
   };
 
-  // Pre-fill service & package from URL parameters (e.g., /contact?package=business) or fallback
   useEffect(() => {
     const parseUrlParams = () => {
       try {
@@ -167,7 +152,7 @@ const ContactForm: React.FC = () => {
     if (!formData.email.trim()) {
       newErrors.email = 'Email address is required.';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = 'Please provide a valid business email address.';
+      newErrors.email = 'Please provide a valid work email address.';
     }
 
     if (!formData.service || formData.service === 'Select an option') {
@@ -177,7 +162,7 @@ const ContactForm: React.FC = () => {
     if (!formData.message.trim()) {
       newErrors.message = 'Please provide an outline of your project or requirements.';
     } else if (formData.message.trim().length < 10) {
-      newErrors.message = 'Message must be at least 10 characters.';
+      newErrors.message = 'Project outline must be at least 10 characters.';
     }
 
     setErrors(newErrors);
@@ -185,7 +170,6 @@ const ContactForm: React.FC = () => {
   };
 
   const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
-    // Strictly prevent default browser form submission and navigation
     if (e) {
       if (typeof e.preventDefault === 'function') e.preventDefault();
       if (typeof e.stopPropagation === 'function') e.stopPropagation();
@@ -202,19 +186,18 @@ const ContactForm: React.FC = () => {
     setStatusMessage('');
 
     try {
-      // Asynchronous API call to the server-side endpoint (/api/contact)
       const apiResponse = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          Accept: 'application/json'
         },
         body: JSON.stringify({
           fullName: formData.fullName.trim(),
           email: formData.email.trim(),
-          company: formData.company.trim(),
+          company: formData.company?.trim() || '',
           service: formData.service.trim(),
-          budget: formData.budget.trim(),
+          budget: formData.budget?.trim() || '',
           message: formData.message.trim()
         })
       });
@@ -224,9 +207,8 @@ const ContactForm: React.FC = () => {
       if (apiResponse.ok && data?.success) {
         setSubmitStatus('success');
         setStatusMessage(
-          data.message || "Message sent successfully. We'll get back to you soon."
+          data.message || "Message sent successfully. I'll get back to you within 24 business hours."
         );
-        // Clear the form data upon verified successful transmission
         setFormData({
           fullName: '',
           email: '',
@@ -239,15 +221,15 @@ const ContactForm: React.FC = () => {
       } else {
         const errorMsg =
           data?.error ||
-          `Unable to transmit your message via SMTP at this moment. Please reach out to us directly at ${SITE_INFO.email}.`;
+          `Unable to transmit your message via SMTP at this moment. Please reach out directly to Ateeq at ${SITE_INFO.email}.`;
         setSubmitStatus('error');
         setStatusMessage(errorMsg);
       }
     } catch (error) {
-      console.error('[Novexa Contact Form] Submission network error:', error);
+      console.error('[Novexa Contact Form] Network error:', error);
       setSubmitStatus('error');
       setStatusMessage(
-        `Network error encountered. Your inquiry could not be submitted. Please contact us directly at ${SITE_INFO.email}.`
+        `Network error encountered. Please email Ateeq directly at ${SITE_INFO.email}.`
       );
     } finally {
       setIsSubmitting(false);
@@ -269,125 +251,95 @@ const ContactForm: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 text-left">
-      
-      {/* Contact Details & Agency Info Card */}
-      <div className="lg:col-span-5 space-y-8">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 text-left">
+      {/* Left Info Column */}
+      <div className="lg:col-span-5 space-y-6">
         <div>
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">
-            Direct Technical Scoping
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-[#0F766E] text-xs font-mono font-bold uppercase mb-3">
+            Founder-Led Inquiries
           </span>
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight font-display">
-            Let's Discuss Your Project Goals
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-display">
+            Start a project.
           </h2>
-          <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed font-normal">
-            Fill in your project requirements below. Our technical leads and design directors will review your brief and respond with an actionable timeline and initial scope proposal.
+          <p className="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
+            Tell me what you want to build — an app, a website, or an app for your agency's client. I reply within 24 business hours.
           </p>
         </div>
 
-        {/* Info Cards */}
-        <div className="space-y-4">
-          <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 text-blue-600 flex items-center justify-center shrink-0">
-              <Mail className="w-5 h-5" />
+        {/* Contact Info Cards */}
+        <div className="space-y-3">
+          <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-start gap-3.5">
+            <div className="w-9 h-9 rounded-xl bg-teal-50 text-[#0D9488] flex items-center justify-center shrink-0">
+              <Mail className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                Primary Inquiries
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                Direct Email
               </span>
               <a
                 href={`mailto:${SITE_INFO.email}`}
-                className="text-slate-900 font-bold text-sm hover:text-blue-600 transition-colors break-all"
+                className="text-slate-900 font-bold text-sm hover:text-[#0D9488] transition-colors break-all"
               >
                 {SITE_INFO.email}
               </a>
-              <p className="text-slate-500 text-xs mt-0.5">
-                Target response: Within 24 business hours
-              </p>
+              <p className="text-slate-500 text-xs mt-0.5">Replies within 24 business hours</p>
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center shrink-0">
-              <Globe className="w-5 h-5" />
+          <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex items-start gap-3.5">
+            <div className="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+              <Clock className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                Digital Presence & Registered Agency
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                Hours
               </span>
               <p className="text-slate-900 font-bold text-sm">
-                {SITE_INFO.domain}
+                Monday–Friday, 09:00–18:00 UK time
               </p>
-              <p className="text-slate-500 text-xs mt-0.5">
-                Operating across the United Kingdom and globally
+              <p className="text-amber-700 text-xs font-mono mt-0.5">
+                [PLACEHOLDER: confirm consultation hours.]
               </p>
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 text-indigo-600 flex items-center justify-center shrink-0">
-              <Clock className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                Consultation Hours
-              </span>
-              <p className="text-slate-900 font-bold text-sm">
-                {SITE_INFO.operatingHours}
-              </p>
-              <p className="text-slate-500 text-xs mt-0.5">
-                {SITE_INFO.status}
-              </p>
-            </div>
+          {/* Placeholders for WhatsApp and Booking Account */}
+          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 font-mono space-y-1">
+            <p>[PLACEHOLDER: WhatsApp — add only after I confirm the business number.]</p>
+            <p>[PLACEHOLDER: Book a call — add only after I confirm a booking account.]</p>
           </div>
-        </div>
-
-        {/* Security & Confidentiality Guarantee */}
-        <div className="p-4 rounded-xl bg-[#F5FAFF] border border-sky-100 text-xs text-slate-600 flex items-center gap-3">
-          <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0" />
-          <span>Non-Disclosure & Confidentiality: All inquiries and architecture briefs are kept strictly confidential under UK standard NDA protocols.</span>
         </div>
       </div>
 
-      {/* Main Form Container */}
+      {/* Right Form Column */}
       <div className="lg:col-span-7">
-        <div className="p-6 sm:p-10 rounded-2xl bg-white border border-slate-200/90 shadow-sm relative">
-          
+        <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-slate-200 shadow-sm relative">
           {submitStatus === 'success' ? (
-            <div className="py-10 px-4 text-center space-y-6 animate-fade-in" id="contact-success-container">
-              <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto shadow-xs">
-                <CheckCircle2 className="w-8 h-8" />
+            <div className="py-8 px-4 text-center space-y-5 animate-fade-in" id="contact-success-container">
+              <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-7 h-7" />
               </div>
-
               <div className="space-y-2 max-w-md mx-auto">
-                <h3 className="text-2xl font-black text-slate-900 tracking-tight font-display">
-                  Message Sent Successfully
+                <h3 className="text-2xl font-black text-slate-900 font-display">
+                  Enquiry Dispatched
                 </h3>
-                <p className="text-emerald-700 font-semibold text-sm bg-emerald-50 py-2 px-4 rounded-lg border border-emerald-200 inline-block">
+                <p className="text-emerald-700 font-semibold text-xs sm:text-sm bg-emerald-50 py-2 px-3 rounded-lg border border-emerald-200 inline-block">
                   {statusMessage}
                 </p>
-                <p className="text-slate-600 text-sm leading-relaxed pt-2">
-                  Your inquiry has been dispatched to <span className="text-blue-600 font-semibold">{SITE_INFO.email}</span>. A technology director will review your specifications and reply to you directly.
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed pt-1">
+                  Your project specifications were delivered to <span className="text-[#0D9488] font-semibold">{SITE_INFO.email}</span>. Founder Ateeq Lateef will reply directly.
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 max-w-md mx-auto text-left space-y-1">
-                <p className="font-bold text-slate-800">Dispatch Details:</p>
-                <p className="text-slate-700">Recipient: <span className="text-blue-600 font-mono font-semibold">{SITE_INFO.email}</span></p>
-                <p className="text-slate-500 text-[11px] pt-1">
-                  Confirmation logged via secure server SMTP connection.
-                </p>
-              </div>
-
-              <div className="pt-4 flex items-center justify-center">
+              <div className="pt-2">
                 <button
                   type="button"
                   id="send-another-inquiry-button"
                   onClick={handleReset}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs rounded-xl transition-all inline-flex items-center gap-2 shadow-sm hover:shadow-md hover:shadow-blue-600/20"
+                  className="px-5 py-2.5 bg-[#0A1A2F] hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all inline-flex items-center gap-2"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
-                  <span>Send Another Inquiry</span>
+                  <span>Send another enquiry</span>
                 </button>
               </div>
             </div>
@@ -403,83 +355,42 @@ const ContactForm: React.FC = () => {
               noValidate
               id="project-consultation-form"
             >
-              <div className="border-b border-slate-100 pb-4 mb-6">
-                <h3 className="text-xl font-bold text-slate-900 tracking-tight font-display">
-                  Project Consultation Form
+              <div className="border-b border-slate-100 pb-3 mb-5">
+                <h3 className="text-xl font-bold text-slate-900 font-display">
+                  Start a Project
                 </h3>
-                <p className="text-slate-500 text-xs mt-1">
-                  Fields marked with <span className="text-blue-600 font-bold">*</span> are required for scoping.
+                <p className="text-slate-500 text-xs mt-0.5">
+                  Fields marked with <span className="text-[#0D9488] font-bold">*</span> are required.
                 </p>
               </div>
 
-              {selectedPackage ? (
-                <div 
-                  id="selected-package-badge" 
-                  className="mb-6 p-4 rounded-xl bg-sky-50 border border-sky-200 text-slate-800 text-xs flex items-center justify-between gap-3 animate-fade-in"
+              {selectedPackage && (
+                <div
+                  id="selected-package-badge"
+                  className="mb-5 p-3.5 rounded-xl bg-teal-50 border border-teal-200 text-slate-800 text-xs flex items-center justify-between gap-3 animate-fade-in"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0" aria-hidden="true" />
-                    <div>
-                      <span className="text-slate-500 font-semibold uppercase tracking-wider text-[10px] block">
-                        Selected Package
-                      </span>
-                      <span className="font-bold text-slate-900 text-sm">{selectedPackage.name}</span>
-                      <span className="text-blue-700 font-bold ml-2">({selectedPackage.price})</span>
-                      <span className="text-slate-500 text-xs ml-2 hidden sm:inline">• {selectedPackage.scope}</span>
-                    </div>
+                  <div>
+                    <span className="text-slate-500 font-semibold uppercase tracking-wider text-[10px] block">
+                      Selected Package
+                    </span>
+                    <span className="font-bold text-slate-900 text-sm">{selectedPackage.name}</span>
+                    <span className="text-[#0D9488] font-bold ml-2">({selectedPackage.price})</span>
+                    <span className="text-slate-500 text-xs ml-2">• {selectedPackage.scope}</span>
                   </div>
                   <button
                     type="button"
                     onClick={() => setSelectedPackage(null)}
-                    className="text-slate-400 hover:text-slate-700 text-xs font-semibold px-2 py-1 rounded bg-white border border-slate-200 transition-colors shrink-0 cursor-pointer"
-                    title="Clear selected package"
+                    className="text-slate-500 hover:text-slate-800 text-xs font-semibold px-2 py-1 rounded bg-white border border-slate-200"
                   >
-                    Change
+                    Clear
                   </button>
-                </div>
-              ) : (
-                <div className="mb-6 p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 text-xs">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-bold text-slate-700 uppercase tracking-wider text-[10px]">
-                      Select Package (Optional):
-                    </span>
-                    <a href="/pricing" className="text-blue-600 hover:underline font-semibold text-[11px]">
-                      Compare Packages →
-                    </a>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
-                    {[
-                      { id: 'audit', name: 'Audit', price: '$499', badge: 'New' },
-                      { id: 'launch', name: 'Launch', price: '$799' },
-                      { id: 'business', name: 'Business', price: '$1,799', badge: 'Popular' },
-                      { id: 'professional', name: 'Professional', price: '$3,499' },
-                      { id: 'custom', name: 'Custom', price: 'Quote' }
-                    ].map(pkg => (
-                      <button
-                        key={pkg.id}
-                        type="button"
-                        onClick={() => handleSelectPackage(pkg.id)}
-                        className="p-2 bg-white hover:bg-sky-50 border border-slate-200 hover:border-blue-400 rounded-lg text-slate-800 text-left transition-all cursor-pointer shadow-2xs"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-[11px] text-slate-900">{pkg.name}</span>
-                          {pkg.badge && (
-                            <span className={`text-[9px] font-bold px-1 py-0.2 rounded ${pkg.badge === 'Popular' ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700'}`}>
-                              {pkg.badge}
-                            </span>
-                          )}
-                        </div>
-                        <span className="text-[11px] font-bold text-blue-700 block mt-0.5">{pkg.price}</span>
-                      </button>
-                    ))}
-                  </div>
                 </div>
               )}
 
               {submitStatus === 'error' && (
-                <div 
+                <div
                   id="contact-error-alert"
-                  className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-3 animate-fade-in"
+                  className="mb-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2.5"
                 >
                   <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                   <div>
@@ -489,11 +400,12 @@ const ContactForm: React.FC = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+              {/* Form Fields from Section 8 */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 {/* Full Name */}
                 <div>
-                  <label htmlFor="fullName" className="block text-xs font-bold text-slate-700 mb-2">
-                    Full Name <span className="text-blue-600">*</span>
+                  <label htmlFor="fullName" className="block text-xs font-bold text-slate-700 mb-1.5">
+                    Full Name <span className="text-[#0D9488]">*</span>
                   </label>
                   <input
                     id="fullName"
@@ -507,21 +419,18 @@ const ContactForm: React.FC = () => {
                     }}
                     placeholder="e.g. Alex Morgan"
                     className={`w-full bg-white border ${
-                      errors.fullName ? 'border-rose-500 ring-2 ring-rose-500/10' : 'border-slate-200 hover:border-slate-300 focus:border-blue-600'
-                    } rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs`}
+                      errors.fullName ? 'border-rose-500' : 'border-slate-200 focus:border-[#14B8A6]'
+                    } rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none`}
                   />
                   {errors.fullName && (
-                    <p className="mt-1.5 text-xs text-rose-600 font-medium flex items-center gap-1">
-                      <AlertCircle className="w-3.5 h-3.5" />
-                      <span>{errors.fullName}</span>
-                    </p>
+                    <p className="mt-1 text-xs text-rose-600">{errors.fullName}</p>
                   )}
                 </div>
 
-                {/* Email Address */}
+                {/* Work Email */}
                 <div>
-                  <label htmlFor="email" className="block text-xs font-bold text-slate-700 mb-2">
-                    Work Email <span className="text-blue-600">*</span>
+                  <label htmlFor="email" className="block text-xs font-bold text-slate-700 mb-1.5">
+                    Work Email <span className="text-[#0D9488]">*</span>
                   </label>
                   <input
                     id="email"
@@ -535,23 +444,20 @@ const ContactForm: React.FC = () => {
                     }}
                     placeholder="alex@company.com"
                     className={`w-full bg-white border ${
-                      errors.email ? 'border-rose-500 ring-2 ring-rose-500/10' : 'border-slate-200 hover:border-slate-300 focus:border-blue-600'
-                    } rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs`}
+                      errors.email ? 'border-rose-500' : 'border-slate-200 focus:border-[#14B8A6]'
+                    } rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none`}
                   />
                   {errors.email && (
-                    <p className="mt-1.5 text-xs text-rose-600 font-medium flex items-center gap-1">
-                      <AlertCircle className="w-3.5 h-3.5" />
-                      <span>{errors.email}</span>
-                    </p>
+                    <p className="mt-1 text-xs text-rose-600">{errors.email}</p>
                   )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-2">
-                {/* Company Name (Optional) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                {/* Company / Organization (optional) */}
                 <div>
-                  <label htmlFor="company" className="block text-xs font-bold text-slate-700 mb-2">
-                    Company / Organization <span className="text-slate-400 font-normal text-[11px]">(Optional)</span>
+                  <label htmlFor="company" className="block text-xs font-bold text-slate-700 mb-1.5">
+                    Company / Organization <span className="text-slate-400 font-normal">(optional)</span>
                   </label>
                   <input
                     id="company"
@@ -560,15 +466,15 @@ const ContactForm: React.FC = () => {
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                     placeholder="e.g. Apex Dynamics Ltd"
-                    className="w-full bg-white border border-slate-200 hover:border-slate-300 focus:border-blue-600 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs"
+                    className="w-full bg-white border border-slate-200 focus:border-[#14B8A6] rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none"
                   />
                 </div>
 
-                {/* Estimated Budget (Optional) */}
+                {/* Estimated Budget (optional) */}
                 <div>
                   <CustomDropdown
                     id="budget"
-                    label="Estimated Budget (Optional)"
+                    label="Estimated Budget (optional)"
                     options={BUDGET_OPTIONS}
                     value={formData.budget}
                     onChange={(val) => setFormData({ ...formData, budget: val })}
@@ -577,8 +483,8 @@ const ContactForm: React.FC = () => {
                 </div>
               </div>
 
-              {/* Service Selection */}
-              <div className="mb-2">
+              {/* Service of Interest */}
+              <div className="mb-4">
                 <CustomDropdown
                   id="service"
                   label="Service of Interest *"
@@ -589,14 +495,14 @@ const ContactForm: React.FC = () => {
                     if (errors.service) setErrors({ ...errors, service: undefined });
                   }}
                   error={errors.service}
-                  placeholder="Select one of the 6 core services"
+                  placeholder="Select service"
                 />
               </div>
 
-              {/* Message / Project Outline */}
-              <div className="mb-6">
-                <label htmlFor="message" className="block text-xs font-bold text-slate-700 mb-2">
-                  Project Outline & Objectives <span className="text-blue-600">*</span>
+              {/* Project Outline & Objectives */}
+              <div className="mb-5">
+                <label htmlFor="message" className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Project Outline & Objectives <span className="text-[#0D9488]">*</span>
                 </label>
                 <textarea
                   id="message"
@@ -608,20 +514,23 @@ const ContactForm: React.FC = () => {
                     setFormData({ ...formData, message: e.target.value });
                     if (errors.message) setErrors({ ...errors, message: undefined });
                   }}
-                  placeholder="Describe your project, desired deliverables, target timeline, or technical challenges..."
+                  placeholder="Tell me what you want to build — an app, a website, or an app for your agency's client..."
                   className={`w-full bg-white border ${
-                    errors.message ? 'border-rose-500 ring-2 ring-rose-500/10' : 'border-slate-200 hover:border-slate-300 focus:border-blue-600'
-                  } rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all shadow-2xs`}
+                    errors.message ? 'border-rose-500' : 'border-slate-200 focus:border-[#14B8A6]'
+                  } rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none`}
                 />
                 {errors.message && (
-                  <p className="mt-1.5 text-xs text-rose-600 font-medium flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    <span>{errors.message}</span>
-                  </p>
+                  <p className="mt-1 text-xs text-rose-600">{errors.message}</p>
                 )}
               </div>
 
-              {/* Submit Button */}
+              {/* Privacy Notice (Placed directly under the contact form, BEFORE the submit button as required by Section 7) */}
+              <div className="mb-5 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed">
+                <strong className="text-slate-800 block mb-0.5">How your details are used:</strong>
+                "The details you send here (name, work email, company and project outline) are used only to reply to your enquiry. They are not shared with anyone else and are not used for marketing. You can ask for your details to be deleted at any time by emailing <a href="mailto:contact@novexasolutions.uk" className="text-[#0D9488] font-bold hover:underline">contact@novexasolutions.uk</a>."
+              </div>
+
+              {/* Submit Button: "Send my enquiry" (exact requested wording from Section 8) */}
               <button
                 type="button"
                 id="contact-form-submit-button"
@@ -631,35 +540,24 @@ const ContactForm: React.FC = () => {
                   handleSubmit(e);
                 }}
                 disabled={isSubmitting}
-                className="w-full py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl transition-all shadow-md hover:shadow-lg hover:shadow-blue-600/20 flex items-center justify-center gap-2 group uppercase tracking-wider cursor-pointer"
+                className="w-full py-3.5 bg-[#14B8A6] hover:bg-[#0D9488] active:bg-[#0F766E] disabled:bg-slate-300 disabled:cursor-not-allowed text-[#0A1A2F] font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer font-display"
               >
                 {isSubmitting ? (
                   <>
-                    <RefreshCw className="w-4 h-4 animate-spin text-white" />
-                    <span>Sending Message...</span>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>Sending enquiry...</span>
                   </>
                 ) : (
                   <>
-                    <span>Dispatch Inquiry to Novexa Solutions</span>
-                    <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <span>Send my enquiry</span>
+                    <Send className="w-3.5 h-3.5" />
                   </>
                 )}
               </button>
-
-              <div className="mt-4 text-center">
-                <p className="text-xs text-slate-500">
-                  Prefer direct email? Reach us at{' '}
-                  <a href={`mailto:${SITE_INFO.email}`} className="text-blue-600 hover:underline font-semibold">
-                    {SITE_INFO.email}
-                  </a>
-                </p>
-              </div>
             </form>
           )}
-
         </div>
       </div>
-
     </div>
   );
 };
